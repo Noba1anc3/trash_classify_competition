@@ -1,3 +1,4 @@
-train=config/train.txt
-valid=config/valid.txt
-names=config/train_classes.txt
+classes=44
+train=data/custom/train.txt
+valid=data/custom/valid.txt
+names=data/custom/train_classes.txt

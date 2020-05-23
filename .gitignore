@@ -1,5 +1,5 @@
 .idea
-PyTorch-YOLOv3/dataset
+PyTorch-YOLOv3/cache
 PyTorch-YOLOv3/output
 PyTorch-YOLOv3/.idea
 *.pyc

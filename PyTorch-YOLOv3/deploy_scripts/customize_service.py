@@ -3,8 +3,8 @@ import json
 import codecs
 from collections import OrderedDict
 from models import *
-from utils_.utils import *
-from utils_.datasets import *
+from utils.utils import *
+from utils.datasets import *
 
 
 from model_service.pytorch_model_service import PTServingBaseService

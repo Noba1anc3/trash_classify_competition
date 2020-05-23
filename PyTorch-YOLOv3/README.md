@@ -4,7 +4,7 @@ Deploy PyTorch Yolo-v3 on Huawei Cloud - ModelArts Platform - [Source Code](http
 ## Data Preparation
 ### Convert Official Dataset's Annotation to New Standard Annotation
 ```
-$ cd PyTorch-YOLOv3/tools
+$ cd PyTorch-YOLOv3/utils
 $ python prepare_datasets.py
 ```
 

@@ -33,7 +33,7 @@ parser.add_argument("--data_config", type=str, default="config/custom.data", hel
 # 拷贝文件到ModelArts上
 parser.add_argument('--local_data_root', default='/cache/', type=str,
                     help='a directory used for transfer data between local path and OBS path')
-parser.add_argument('--data_url', required=True, type=str,
+parser.add_argument('--data_url', type=str,
                     help='the training and validation data path')
 parser.add_argument('--data_local', default='', type=str,
                     help='the training and validation data path on local')
@@ -65,7 +65,7 @@ parser.add_argument("--compute_map", default=False, help="if True computes mAP e
 # 模型保存
 parser.add_argument('--train_local', default='', type=str,
                     help='the training output results on local')
-parser.add_argument('--train_url', required=True, type=str,
+parser.add_argument('--train_url', type=str,
                     help='the path to save training outputs')
 
 parser.add_argument('--init_method', default='', type=str, help='the training output results on local')
@@ -288,7 +288,7 @@ def valid(model, path, class_names, opt):
 if __name__ == "__main__":
 
     opt = parser.parse_args()
-    opt = prepare_data_on_modelarts(opt)
+    # opt = prepare_data_on_modelarts(opt)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

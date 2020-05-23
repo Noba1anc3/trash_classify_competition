@@ -4,15 +4,20 @@
 
 ## Preparation
 ### Convert Official Dataset's Annotation to New Standard Annotation
+```
 $ cd PyTorch-YOLOv3/tools
 $ python prepare_datasets.py
+```
 
 ## Usage
 ### Download Pretrained Weights
+```
 $ cd weights/
 $ bash download_weights.sh
+```
 
 ### Train
+```
 $ train.py [-h] [--epochs EPOCHS] [--batch_size BATCH_SIZE]
                 [--gradient_accumulations GRADIENT_ACCUMULATIONS]
                 [--model_def MODEL_DEF] [--data_config DATA_CONFIG]
@@ -22,23 +27,33 @@ $ train.py [-h] [--epochs EPOCHS] [--batch_size BATCH_SIZE]
                 [--evaluation_interval EVALUATION_INTERVAL]
                 [--compute_map COMPUTE_MAP]
                 [--multiscale_training MULTISCALE_TRAINING]
+```
+
 ### Test
+```
 $ python test.py --weights_path weights/yolov3.weights
+```
 
 ### Inference
+```
 $ python detect.py --image_folder images/
+```
 
 ### Tensorboard
 Track training progress in Tensorboard:
 - Initialize training
 - Run the command below
 - Go to http://localhost:6006/
+```
 $ tensorboard --logdir='logs' --port=6006
+```
 
 ### 创建自定义模型的cfg文件
+```
 $ cd PyTorch-YOLOv3-ModelArts/config
 $ bash create_custom_model.sh <num-classes> #此处已创建，即yolov3-44.cfg
-    
+```
+
 ## 在ModelArts平台上训练
 1.将新数据集打包成压缩文件，替换原始数据集压缩包；
 

@@ -18,7 +18,7 @@ import math
 import numpy as np
 from skimage.util import random_noise
 from skimage import exposure
-from xml_helper import parse_xml
+from xml_tool import parse_xml, change_xml
 
 
 def show_pic(image, bboxes=None):
@@ -422,8 +422,6 @@ class DataAugmentForObjectDetection:
 
 
 if __name__ == '__main__':
-    from test import change_xml
-
     dataAug = DataAugmentForObjectDetection()
 
     pic_root_path = './train/VOC2007/JPEGImages'
@@ -470,4 +468,3 @@ if __name__ == '__main__':
 
             print(count, overall)
 
-    print(count)

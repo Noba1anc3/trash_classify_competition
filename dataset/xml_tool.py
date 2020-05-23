@@ -4,6 +4,32 @@ old_anno_dir = './train/VOC2007/Annotations/'
 new_anno_dir = './aug_train/VOC2007/Annotations/'
 
 
+# 从xml文件中提取bounding box信息, 格式为[[x_min, y_min, x_max, y_max, name]]
+def parse_xml(xml_path):
+    """
+    输入：
+        xml_path: xml的文件路径
+    输出：
+        从xml文件中提取bounding box信息, 格式为[[x_min, y_min, x_max, y_max, name]]
+    """
+
+    tree = ET.parse(xml_path)
+    root = tree.getroot()
+    objs = root.findall('object')
+    coords = list()
+
+    for ix, obj in enumerate(objs):
+        name = obj.find('name').text
+        box = obj.find('bndbox')
+        x_min = int(box[0].text)
+        y_min = int(box[1].text)
+        x_max = int(box[2].text)
+        y_max = int(box[3].text)
+        coords.append([x_min, y_min, x_max, y_max, name])
+
+    return coords
+
+
 def change_xml(filename, height, width, box):
     updateTree = ET.parse(old_anno_dir + filename)
     root = updateTree.getroot()

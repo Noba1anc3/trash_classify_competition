@@ -1,0 +1,3 @@
+train=config/train.txt
+valid=config/valid.txt
+names=config/train_classes.txt

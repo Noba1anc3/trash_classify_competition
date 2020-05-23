@@ -1,0 +1,9 @@
+terminaltables==3.1.0
+Pillow
+torch>=1.0
+tqdm
+torchvision
+numpy
+matplotlib
+tensorflow
+tensorboard

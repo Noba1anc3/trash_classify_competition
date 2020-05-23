@@ -1,23 +1,13 @@
 # 将原始数据集的训练集和验证集分别组织成新的文件形式
-# target_trainval_dir/
-#     images/
-#         0001.jpg
-#         0002.jpg
-#         0003.jpg
-#     labels/
-#         0001.txt
-#         0002.txt
-#         0003.txt
-#
 # 将trainval文件夹打包并命名为trainval.zip, 上传到OBS中以备使用。
-#
+
 # 生成的txt文件为同名图片的标注，文件中的每一行为一个bbox
-# 格式为：  class_id x_center y_center width height   其中中心坐标和宽高都为小数形式
+# 格式为: class_id x_center y_center width height (其中中心坐标和宽高都为小数形式)
 
 import os
+import shutil
 import xml.etree.ElementTree as ET
 from tqdm import tqdm
-import shutil
 
 
 def generate_label_txt(ori_anno_dir, target_anno_dir, class_names):
@@ -25,7 +15,7 @@ def generate_label_txt(ori_anno_dir, target_anno_dir, class_names):
     # 生成txt标注文件
     """
 
-    for xml_filename in tqdm(os.listdir(ori_anno_dir)):  # 对于每一个xml，生成对应的txt
+    for xml_filename in tqdm(os.listdir(ori_anno_dir)):
 
         xml_path = os.path.join(ori_anno_dir, xml_filename)
         tree = ET.parse(xml_path)
@@ -56,11 +46,11 @@ def generate_label_txt(ori_anno_dir, target_anno_dir, class_names):
 
             # 错误标注处理：坐标越界或宽高小于等于0
             if box[2] > w or box[3] > h:
-                print('Image with annotation error:', xml_path)
+                print('Image with annotation error:', xml_path, '\n')
             if box[0] < 0 or box[1] < 0:
-                print('Image with annotation error:', xml_path)
+                print('Image with annotation error:', xml_path, '\n')
             if box[2] <= box[0] or box[3] <= box[1]:
-                print('Image with annotation error:', xml_path)
+                print('Image with annotation error:', xml_path, '\n')
 
         # 写入对应txt文件
         txt_anno_path = os.path.join(target_anno_dir, xml_filename)
@@ -98,7 +88,7 @@ def creat_new_datasets(ori_dir, target_dir):
 
 
 if __name__ == "__main__":
-    ori_trainval_dir = '/home/j_m/Desktop/trainval_'
-    target_trainval_dir = '/home/j_m/Desktop/trainval'
+    ori_trainval_dir = '../data/train'
+    target_trainval_dir = '../data/new_train'
 
     creat_new_datasets(ori_trainval_dir, target_trainval_dir)

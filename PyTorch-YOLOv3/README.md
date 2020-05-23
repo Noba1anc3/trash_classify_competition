@@ -1,19 +1,43 @@
 # PyTorch-YOLOv3-ModelArts
-在华为云ModelArts平台部署PyTorch版本的YOLOv3目标检测网络，实现模型训练、在线预测及参赛发布。
+在华为云ModelArts平台部署PyTorch版本的Yolo-v3目标检测网络，实现模型训练、在线预测及参赛发布。
 - source code: https://github.com/eriklindernoren/PyTorch-YOLOv3
 
-## 使用前准备
-##### 解压官方原始数据集，制作新数据集
-    $ cd PyTorch-YOLOv3-ModelArts/tools
-    $ python prepare_datasets.py --source_datasets --new_datasets
+## Preparation
+### Convert Official Dataset's Annotation to New Standard Annotation
+$ cd PyTorch-YOLOv3/tools
+$ python prepare_datasets.py
 
-##### 下载预训练模型
-    $ cd weights/
-    $ bash download_weights.sh
+## Usage
+### Download Pretrained Weights
+$ cd weights/
+$ bash download_weights.sh
 
-##### 创建自定义模型的cfg文件
-    $ cd PyTorch-YOLOv3-ModelArts/config
-    $ bash create_custom_model.sh <num-classes> #此处已创建，即yolov3-44.cfg
+### Train
+$ train.py [-h] [--epochs EPOCHS] [--batch_size BATCH_SIZE]
+                [--gradient_accumulations GRADIENT_ACCUMULATIONS]
+                [--model_def MODEL_DEF] [--data_config DATA_CONFIG]
+                [--pretrained_weights PRETRAINED_WEIGHTS] [--n_cpu N_CPU]
+                [--img_size IMG_SIZE]
+                [--checkpoint_interval CHECKPOINT_INTERVAL]
+                [--evaluation_interval EVALUATION_INTERVAL]
+                [--compute_map COMPUTE_MAP]
+                [--multiscale_training MULTISCALE_TRAINING]
+### Test
+$ python test.py --weights_path weights/yolov3.weights
+
+### Inference
+$ python detect.py --image_folder images/
+
+### Tensorboard
+Track training progress in Tensorboard:
+- Initialize training
+- Run the command below
+- Go to http://localhost:6006/
+$ tensorboard --logdir='logs' --port=6006
+
+### 创建自定义模型的cfg文件
+$ cd PyTorch-YOLOv3-ModelArts/config
+$ bash create_custom_model.sh <num-classes> #此处已创建，即yolov3-44.cfg
     
 ## 在ModelArts平台上训练
 1.将新数据集打包成压缩文件，替换原始数据集压缩包；
@@ -29,14 +53,6 @@
 3.训练过程中，学习率等参数默认不进行调整，请依个人经验调整
 
 4.其余流程同大赛指导文档。
-
-## 测试
-1. 与官方keras版本的baseline比较，训练速度提升两倍多（官方baseline跑10个epoch需要150分钟，本项目仅需47分钟）；参赛发布大概一小时完成判分，同样快一倍以上。
-
-2. 官方baseline跑10个epoch用时两个半小时，判分却仅得0.05；本项目只训练头部跑5个epoch仅仅用时17分钟，判分达到0.17（惊掉下巴）
-
-3. 因为比赛刚开始，过多的测试就不做了。个人估计，在此baseline上改进，最终成绩可以达到0.6分左右。
-当然，如果想拿奖金的话还是转投RCNN或者EfficientDet吧。
 
 
 ## Credit
@@ -57,7 +73,9 @@ to 57.5 AP50 in 198 ms by RetinaNet, similar performance
 but 3.8× faster. As always, all the code is online at
 https://pjreddie.com/yolo/.
 
-[[Paper]](https://pjreddie.com/media/files/papers/YOLOv3.pdf) [[Project Webpage]](https://pjreddie.com/darknet/yolo/) [[Authors' Implementation]](https://github.com/pjreddie/darknet)
+[[Paper]](https://pjreddie.com/media/files/papers/YOLOv3.pdf)
+[[Project Webpage]](https://pjreddie.com/darknet/yolo/)
+[[Authors' Implementation]](https://github.com/pjreddie/darknet)
 
 ```
 @article{yolov3,

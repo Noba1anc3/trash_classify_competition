@@ -1,5 +1,5 @@
 # PyTorch-YOLOv3-ModelArts
-在华为云ModelArts平台部署PyTorch版本的Yolo-v3目标检测网络，实现模型训练、在线预测及参赛发布。
+Deploy PyTorch Yolo-v3 on Huawei Cloud - ModelArts Platform
 [source code](https://github.com/eriklindernoren/PyTorch-YOLOv3)
 
 ## Data Preparation
@@ -58,9 +58,10 @@ $ bash create_custom_model.sh <num-classes> #此处已创建，即yolov3-44.cfg
 1. Zip converted dataset to zipfile
 
 2. Path of training and testing set's images are stored in config/train.txt and config/test.txt.
- They are the address in the virtual container
+They are the address in the virtual container
 
 3.If using pretrained weights，please upload to OBS bucket previously，and add parameter
+
 `--pretrained_weights = s3://your_bucket/{model}`
 
 

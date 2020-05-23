@@ -1,4 +1,4 @@
-## 2020 Huaweiyun Cup Shenzhen Open Data Appliance Innovation Competition
+## 2020 Huawei Cloud Cup Shenzhen Open Data Appliance Innovation Competition
 [Competition Link](https://competition.huaweicloud.com/information/1000038439/introduction)
 
 ## Dataset
@@ -20,7 +20,7 @@ After artificial check, 25 images of testing set is deleted.
 - Training Set: 13468 Images
 - Testing Set: 1471 Images
 
-## Data Character
+## Data Characteristics
 - Occlusion
 - Part of thing in the image
 - Image is a part of thing
@@ -43,3 +43,6 @@ After artificial check, 25 images of testing set is deleted.
     - Cutout Size : (ImgHeight + ImgWidth) / 15
     - Cutout Hole : 2
     - Cutout IoU Threshold : 0.5
+
+## Train Yolo-v3 Model
+[Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/PyTorch-YOLOv3)

@@ -45,4 +45,4 @@ After artificial check, 25 images of testing set is deleted.
     - Cutout IoU Threshold : 0.5
 
 ## Train Yolo-v3 Model
-[Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/PyTorch-YOLOv3)
+[Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/PyTorch-YOLOv3/README.md)

@@ -6,7 +6,7 @@
 
 ## Data Cleansing
 - Delete data which annotation bbox's location out of range
-- delete data which annotation bbox's xmin <xmax, or ymin < ymax
+- Delete data which annotation bbox's xmin < xmax, or ymin < ymax
 - Delete data which without annotation bbox
 
 ## Dataset Split
@@ -18,7 +18,7 @@ Training Set : Testing Set = 9 : 1
 After artificial check, 25 images of testing set is deleted.
 
 - Training Set: 13468 Images
-- Testing Set: 1496 Images
+- Testing Set: 1471 Images
 
 ## Data Character
 - Occlusion
@@ -33,13 +33,13 @@ After artificial check, 25 images of testing set is deleted.
 - Shift Ratio : 0.5
 - Rotate Ratio : 0.5
 - Flip Ratio : 0.6
- - Horizontal Flip Ratio : 0.8
- - Vertical Flip Ratio : 0.2
+    - Horizontal Flip Ratio : 0.8
+    - Vertical Flip Ratio : 0.2
 - Change Light Ratio : 0.7
- - Range : [0.5, 1.5]
+    - Range : [0.5, 1.5]
 - Add noise Ratio : 0.6
- - Mode : Gaussian
+    - Mode : Gaussian
 - Cutout Ratio : 0.6
- - Cutout Size : (ImgHeight + ImgWidth)/15
- - Cutout Hole : 2
- - Cutout IoU Threshold : 0.5
+    - Cutout Size : (ImgHeight + ImgWidth) / 15
+    - Cutout Hole : 2
+    - Cutout IoU Threshold : 0.5

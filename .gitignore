@@ -1,3 +1,5 @@
 data
 .idea
+PyTorch-YOLOv3/.idea
+*.pyc
 

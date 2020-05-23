@@ -54,11 +54,11 @@ $ bash create_custom_model.sh <num-classes> #此处已创建，即yolov3-44.cfg
 ```
 
 ## Train on ModelArts
-1. Zip converted dataset to zipfile
+- Zip converted dataset to zipfile
 
-2. Path of training and testing set's images are stored in config/train.txt and config/test.txt. They are the address in the virtual container
+- Path of training and testing set's images are stored in config/train.txt and config/test.txt. They are the address in the virtual container
 
-3.To use pretrained weights，please upload the model to OBS bucket previously，and add parameter to config
+- To use pretrained weights，please upload the model to OBS bucket previously，and add parameter to config
 
 `--pretrained_weights = s3://your_bucket/{model}`
 

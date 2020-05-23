@@ -1,4 +1,4 @@
 classes=44
 train=data/custom/train.txt
 valid=data/custom/valid.txt
-names=data/custom/train_classes.txt
+names=data/custom/classes.names

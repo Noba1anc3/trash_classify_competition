@@ -28,7 +28,6 @@ except:
 
 parser = argparse.ArgumentParser()
 
-# 包含train.txt,　val.txt,　train_classes路径
 parser.add_argument("--data_config", type=str, default="config/custom.data", help="path to data config file")
 
 # 拷贝文件到ModelArts上
@@ -69,7 +68,6 @@ parser.add_argument('--train_local', default='', type=str,
 parser.add_argument('--train_url', required=True, type=str,
                     help='the path to save training outputs')
 
-# 不知道是什么，但是没有会报错
 parser.add_argument('--init_method', default='', type=str, help='the training output results on local')
 
 

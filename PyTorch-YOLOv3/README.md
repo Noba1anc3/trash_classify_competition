@@ -1,8 +1,8 @@
 # PyTorch-YOLOv3-ModelArts
 在华为云ModelArts平台部署PyTorch版本的Yolo-v3目标检测网络，实现模型训练、在线预测及参赛发布。
-- source code: https://github.com/eriklindernoren/PyTorch-YOLOv3
+[source code](https://github.com/eriklindernoren/PyTorch-YOLOv3)
 
-## Preparation
+## Data Preparation
 ### Convert Official Dataset's Annotation to New Standard Annotation
 ```
 $ cd PyTorch-YOLOv3/tools
@@ -54,24 +54,17 @@ $ cd PyTorch-YOLOv3-ModelArts/config
 $ bash create_custom_model.sh <num-classes> #此处已创建，即yolov3-44.cfg
 ```
 
-## 在ModelArts平台上训练
-1.将新数据集打包成压缩文件，替换原始数据集压缩包；
+## Train on ModelArts
+1. Zip converted dataset to zipfile
 
-2.训练集和测试集的图片路径默认保存在config/train.txt和valid.txt中，每一行代表一张图片，默认按8：2划分。注意每行图片的路径为虚拟容器中的地址，自己重新划分训练集时只需要修改最后的图片名称，千万不要更改路径！
+2. Path of training and testing set's images are stored in config/train.txt and config/test.txt.
+ They are the address in the virtual container
 
-2.如果使用预训练模型，请提前将其上传到自己的OBS桶中，并添加参数
-
-`--pretrained_weights = s3://your_bucket/{model}`。
-
-此处的model可以是官方预训练模型（yolov3.weights或darknet53.conv.74），也可以是自己训练过的PyTorch模型（.pth）。
-
-3.训练过程中，学习率等参数默认不进行调整，请依个人经验调整
-
-4.其余流程同大赛指导文档。
+3.If using pretrained weights，please upload to OBS bucket previously，and add parameter
+`--pretrained_weights = s3://your_bucket/{model}`
 
 
 ## Credit
-
 ### YOLOv3: An Incremental Improvement
 _Joseph Redmon, Ali Farhadi_ <br>
 

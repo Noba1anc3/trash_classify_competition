@@ -59,8 +59,9 @@ $ bash create_custom_model.sh <num-classes> #此处已创建，即yolov3-44.cfg
 - Path of training and testing set's images are stored in config/train.txt and config/test.txt. They are the address in the virtual container
 
 - To use pretrained weights，please upload the model to OBS bucket previously，and add parameter to config
-`--pretrained_weights = s3://your_bucket/{model}`
-
+```
+--pretrained_weights = s3://your_bucket/{model}
+```
 
 ## Credit
 ### YOLOv3: An Incremental Improvement

@@ -1,5 +1,6 @@
 .idea
 PyTorch-YOLOv3/dataset
+PyTorch-YOLOv3/output
 PyTorch-YOLOv3/.idea
 *.pyc
 *.weights

@@ -293,14 +293,11 @@ if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # current_dir = os.path.dirname(__file__)
+    current_dir = os.path.dirname(__file__)
     data_config = parse_data_config(opt.data_config)
-    train_path = data_config["train"]
-    valid_path = data_config["valid"]
-    class_names = load_classes(data_config["names"])
-    # train_path = os.path.join(current_dir, data_config["train"])
-    # valid_path = os.path.join(current_dir, data_config["valid"])
-    # class_names = load_classes(os.path.join(current_dir, data_config["names"]))
+    train_path = os.path.join(current_dir, data_config["train"])
+    valid_path = os.path.join(current_dir, data_config["valid"])
+    class_names = load_classes(os.path.join(current_dir, data_config["names"]))
 
     # 初始化模型：读取模型配置文件(opt.model_def)进行模型初始化
     model = Darknet(opt.model_def, opt.img_size).to(device)

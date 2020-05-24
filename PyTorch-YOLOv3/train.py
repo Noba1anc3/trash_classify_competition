@@ -9,15 +9,12 @@ from test import evaluate
 from terminaltables import AsciiTable
 
 import os
-import sys
 import time
 import datetime
 import argparse
 
 import torch
 from torch.utils.data import DataLoader
-from torchvision import datasets
-from torchvision import transforms
 from torch.autograd import Variable
 
 try:
@@ -50,7 +47,7 @@ parser.add_argument("--batch_size", type=int, default=32, help="size of each ima
 parser.add_argument("--n_cpu", type=int, default=8, help="number of cpu threads to use during batch generation")
 
 # 训练
-parser.add_argument('--max_epochs_1', default=0, type=int, help='number of total epochs to run in stage one')
+parser.add_argument('--max_epochs_1', default=5, type=int, help='number of total epochs to run in stage one')
 parser.add_argument('--max_epochs_2', default=20, type=int, help='number of total epochs to run in total')
 parser.add_argument("--freeze_body_1", type=int, default=2, help="frozen specific layers for stage one")
 parser.add_argument("--freeze_body_2", type=int, default=0, help="frozen specific layers for stage two")
@@ -107,16 +104,16 @@ def prepare_data_on_modelarts(args):
         args.data_local = args.data_url
     else:
         args.data_local = os.path.join(args.local_data_root, 'datasets/trainval')
-        if not os.path.exists(args.data_local):                 # trainval目录不存在
+        if not os.path.exists(args.data_local):  # trainval目录不存在
             data_dir = os.path.join(args.local_data_root, 'datasets')
             mox.file.copy_parallel(args.data_url, data_dir)
-            os.system('cd %s;unzip trainval.zip' % data_dir)        # 进入datasets目录，解压缩trainval.zip
-            if os.path.isdir(args.data_local):                      # 解压成功
-                os.system('cd %s;rm trainval.zip' % data_dir)           # 进入datasets目录，删除trainval.zip
+            os.system('cd %s;unzip trainval.zip' % data_dir)
+            if os.path.isdir(args.data_local):  # 解压成功
+                os.system('cd %s;rm trainval.zip' % data_dir)
                 print('unzip trainval.zip success, args.data_local is', args.data_local)
-            else:                                                   # 解压失败
+            else:  # 解压失败
                 raise Exception('unzip trainval.zip Failed')
-        else:                                                   # trainval目录已经存在
+        else:  # trainval目录已经存在
             print('args.data_local: %s is already exist, skip copy' % args.data_local)
 
     # 创建日志文件夹/cache/log
@@ -134,8 +131,9 @@ def gen_model_dir(args, model_best_path):
     current_dir = os.path.dirname(__file__)
 
     # 用户文件
-    mox.file.copy_parallel(os.path.join(current_dir, 'utils_'),
-                           os.path.join(args.train_url, 'model/utils_'))
+    mox.file.copy_parallel(os.path.join(current_dir, 'utils'),
+                           os.path.join(args.train_url, 'model/utils'))
+
     mox.file.copy(os.path.join(current_dir, 'config/train_classes.txt'),
                   os.path.join(args.train_url, 'model/train_classes.txt'))
     mox.file.copy(os.path.join(current_dir, 'models.py'),
@@ -154,7 +152,9 @@ def gen_model_dir(args, model_best_path):
     # 服务部署文件
     mox.file.copy_parallel(os.path.join(current_dir, 'deploy_scripts'),
                            os.path.join(args.train_url, 'model'))
-    print('gen_model_dir success, model dir is at', os.path.join(args.train_url, 'model'))
+
+    print('gen_model_dir success, model dir is at',
+          os.path.join(args.train_url, 'model'))
 
 
 def freeze_body(model, freeze_body):
@@ -276,6 +276,7 @@ def valid(model, path, class_names, opt):
         ("val_mAP", AP.mean()),
         ("val_f1", f1.mean()),
     ]
+    # logger.list_of_scalars_summary(evaluation_metrics, epoch)
 
     ap_table = [["Index", "Class name", "AP"]]
     for i, c in enumerate(ap_class):
@@ -288,17 +289,18 @@ def valid(model, path, class_names, opt):
 if __name__ == "__main__":
 
     opt = parser.parse_args()
-    # opt = prepare_data_on_modelarts(opt)
+    opt = prepare_data_on_modelarts(opt)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # 包含train.txt,　val.txt,　train_classes路径
-    current_dir = os.path.dirname(__file__)
+    # current_dir = os.path.dirname(__file__)
     data_config = parse_data_config(opt.data_config)
-    train_path = os.path.join(current_dir, data_config["train"])
-    valid_path = os.path.join(current_dir, data_config["valid"])
-    class_names = load_classes(os.path.join(current_dir, data_config["names"]))
-    print('----------------------------', current_dir)
+    train_path = data_config["train"]
+    valid_path = data_config["valid"]
+    class_names = load_classes(data_config["names"])
+    # train_path = os.path.join(current_dir, data_config["train"])
+    # valid_path = os.path.join(current_dir, data_config["valid"])
+    # class_names = load_classes(os.path.join(current_dir, data_config["names"]))
 
     # 初始化模型：读取模型配置文件(opt.model_def)进行模型初始化
     model = Darknet(opt.model_def, opt.img_size).to(device)
@@ -325,7 +327,7 @@ if __name__ == "__main__":
     # 存储mAP最高的模型
     model_best = {'mAP': 0, 'name': ''}
 
-    # 第一阶段训练，每一个epoch后计算一次mAP
+    # first stage training to get a relatively stable model
     optimizer_1 = torch.optim.Adam(freeze_body(model, opt.freeze_body_1), lr=opt.lr_1)
     for epoch in range(opt.max_epochs_1):
 
@@ -343,7 +345,7 @@ if __name__ == "__main__":
                 model_best['mAP'] = AP.mean()
                 model_best['name'] = ckpt_name
 
-    # 第二阶段训练
+    # second stage training to achieve higher mAP
     optimizer_2 = torch.optim.Adam(freeze_body(model, opt.freeze_body_2), lr=opt.lr_2)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer_2, step_size=10)
     for epoch in range(opt.max_epochs_1, opt.max_epochs_2):

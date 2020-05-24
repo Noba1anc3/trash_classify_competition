@@ -112,7 +112,7 @@ class ObjectDetectionService(PTServingBaseService):
         return data
 
     def inference(self, data):
-        '''
+        """
         Wrapper function to run preprocess, inference and postprocess functions.
 
         Parameters
@@ -124,7 +124,7 @@ class ObjectDetectionService(PTServingBaseService):
         -------
         list of outputs to be sent back to client.
             data to be sent back
-        '''
+        """
         pre_start_time = time.time()
         data = self._preprocess(data)
         infer_start_time = time.time()

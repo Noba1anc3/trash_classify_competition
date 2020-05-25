@@ -11,20 +11,11 @@
 - Epoch-8 Loss : 17
 - Epoch-9 Loss : 15
 - Epoch-10 Loss : 15
-- Epoch-11 Loss : 14
-- Epoch-12 Loss : 14
-- Epoch-13 Loss : 14
-- Epoch-14 Loss : 13
-- Epoch-15 Loss : 15
-- Epoch-16 Loss : 14
-- Epoch-17 Loss : 14
-- Epoch-18 Loss : 13
-- Epoch-19 Loss : 14
-- Epoch-20 Loss : 14
-- Epoch-21 Loss : 13
-- Epoch-22 Loss : 14
-- Epoch-23 Loss : 14
-- Epoch-24 Loss : 13
-- Epoch-25 Loss : 13
-- Epoch-26 Loss : 14
-- Epoch-27 Loss : 13
+- Epoch-11 ~ 27 Loss : 13 ~ 14
+
+### Evaluation Result
+- Without Pretrained Model
+| ID | Time | Name                     | Epoch | Loss | Evaluation mAP | Purpose | Analysis | Beizhu |
+|:--:|:-----|-------------------------:|:-----:|:----:|:--------------:|:-------:|:--------:|:------:|
+| 01 | 0525 | 不使用预训练模型            | 20    |      | 499            |         |          |        |
+| 02 | 0525 | 使用预训练模型　+ 一阶段50轮 | 20    |      | 29.9           |         |          |        |

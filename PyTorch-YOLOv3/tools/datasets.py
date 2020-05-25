@@ -1,5 +1,4 @@
 
-
 import os
 import glob
 import random
@@ -57,7 +56,7 @@ class ImageFolder(Dataset):
 
 
 class ListDataset(Dataset):
-    def __init__(self, list_path, img_size=416, augment=False, multiscale=True, normalized_labels=True):
+    def __init__(self, list_path, img_size=416, multiscale=True, normalized_labels=True):
         with open(list_path, "r") as file:
             self.img_files = file.readlines()
             # for index in range(len(self.img_files)):
@@ -69,7 +68,6 @@ class ListDataset(Dataset):
         ]
         self.img_size = img_size
         self.max_objects = 100
-        self.augment = augment
         self.multiscale = multiscale
         self.normalized_labels = normalized_labels
         self.min_size = self.img_size - 3 * 32

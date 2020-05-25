@@ -24,7 +24,6 @@ except:
 
 
 parser = argparse.ArgumentParser()
-
 parser.add_argument("--data_config", type=str, default="config/custom.data", help="path to data config file")
 
 # 拷贝文件到ModelArts上
@@ -209,6 +208,7 @@ def train(model, dataloader, optimizer, epoch, opt, device):
         "conf_obj",
         "conf_noobj",
     ]
+
     for batch_i, (_, imgs, targets) in enumerate(dataloader):
         batches_done = len(dataloader) * epoch + batch_i
 
@@ -288,19 +288,18 @@ if __name__ == "__main__":
     valid_path = os.path.join(current_dir, data_config["valid"])
     class_names = load_classes(os.path.join(current_dir, data_config["names"]))
 
-    # 初始化模型：读取模型配置文件(opt.model_def)进行模型初始化
     model = Darknet(opt.model_def, opt.img_size).to(device)
     model.apply(weights_init_normal)
 
-    # 是否使用加载预训练模型
     if opt.pretrained_weights:
         if opt.pretrained_weights.endswith(".pth"):
             model.load_state_dict(torch.load(opt.pretrained_weights))
         else:
             model.load_darknet_weights(opt.pretrained_weights)
 
-    # 加载数据，同时选择是否进行数据增强
-    dataset = ListDataset(train_path, img_size=opt.img_size, augment=False, multiscale=opt.multiscale_training)
+    dataset = ListDataset(
+        train_path, img_size=opt.img_size, multiscale=opt.multiscale_training)
+
     dataloader = torch.utils.data.DataLoader(
         dataset,
         batch_size=opt.batch_size,
@@ -310,7 +309,6 @@ if __name__ == "__main__":
         collate_fn=dataset.collate_fn,
     )
 
-    # 存储mAP最高的模型
     model_best = {'mAP': 0, 'name': ''}
 
     # first stage training to get a relatively stable model

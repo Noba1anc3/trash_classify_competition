@@ -1,0 +1,30 @@
+## Logs
+### Loss
+- Start Loss : 235
+- Epoch-1 Loss : 66
+- Epoch-2 Loss : 39
+- Epoch-3 Loss : 28
+- Epoch-4 Loss : 24
+- Epoch-5 Loss : 20
+- Epoch-6 Loss : 19
+- Epoch-7 Loss : 19
+- Epoch-8 Loss : 17
+- Epoch-9 Loss : 15
+- Epoch-10 Loss : 15
+- Epoch-11 Loss : 14
+- Epoch-12 Loss : 14
+- Epoch-13 Loss : 14
+- Epoch-14 Loss : 13
+- Epoch-15 Loss : 15
+- Epoch-16 Loss : 14
+- Epoch-17 Loss : 14
+- Epoch-18 Loss : 13
+- Epoch-19 Loss : 14
+- Epoch-20 Loss : 14
+- Epoch-21 Loss : 13
+- Epoch-22 Loss : 14
+- Epoch-23 Loss : 14
+- Epoch-24 Loss : 13
+- Epoch-25 Loss : 13
+- Epoch-26 Loss : 14
+- Epoch-27 Loss : 13

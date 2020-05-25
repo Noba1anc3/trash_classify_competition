@@ -134,7 +134,7 @@ def gen_model_dir(args, model_best_path):
     mox.file.copy_parallel(os.path.join(current_dir, 'utils'),
                            os.path.join(args.train_url, 'model/utils'))
 
-    mox.file.copy(os.path.join(current_dir, 'config/train_classes.txt'),
+    mox.file.copy(os.path.join(current_dir, 'data/custom/classes.names'),
                   os.path.join(args.train_url, 'model/train_classes.txt'))
     mox.file.copy(os.path.join(current_dir, 'models.py'),
                   os.path.join(args.train_url, 'model/models.py'))
@@ -233,17 +233,6 @@ def train(model, dataloader, optimizer, epoch, opt, device):
             formats["cls_acc"] = "%.2f%%"
             row_metrics = [formats[metric] % yolo.metrics.get(metric, 0) for yolo in model.yolo_layers]
             metric_table += [[metric, *row_metrics]]
-
-            '''
-            # Tensorboard logging
-            tensorboard_log = []
-            for j, yolo in enumerate(model.yolo_layers):
-                for name, metric in yolo.metrics.items():
-                    if name != "grid_size":
-                        tensorboard_log += [(f"{name}_{j+1}", metric)]
-            tensorboard_log += [("loss", loss.item())]
-            logger.list_of_scalars_summary(tensorboard_log, batches_done)
-            '''
 
         log_str += AsciiTable(metric_table).table
         log_str += f"\nTotal loss {loss.item()}"

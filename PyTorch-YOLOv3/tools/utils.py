@@ -1,13 +1,8 @@
 from __future__ import division
 import os
-import codecs
-import math
-import time
 import tqdm
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.autograd import Variable
+import codecs
 import numpy as np
 
 

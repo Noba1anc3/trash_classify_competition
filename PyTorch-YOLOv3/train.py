@@ -1,9 +1,9 @@
 from __future__ import division
 
 from models import *
-from utils.utils import *
-from utils.datasets import *
-from utils.parse_config import *
+from tools.utils import *
+from tools.datasets import *
+from tools.parse_config import *
 from test import evaluate
 
 from terminaltables import AsciiTable
@@ -131,8 +131,8 @@ def gen_model_dir(args, model_best_path):
     current_dir = os.path.dirname(__file__)
 
     # 用户文件
-    mox.file.copy_parallel(os.path.join(current_dir, 'utils'),
-                           os.path.join(args.train_url, 'model/utils'))
+    mox.file.copy_parallel(os.path.join(current_dir, 'tools'),
+                           os.path.join(args.train_url, 'model/tools'))
 
     mox.file.copy(os.path.join(current_dir, 'data/custom/classes.names'),
                   os.path.join(args.train_url, 'model/train_classes.txt'))

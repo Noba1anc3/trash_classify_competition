@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import json
-import codecs
 from collections import OrderedDict
 from models import *
-from utils.utils import *
-from utils.datasets import *
+from tools.utils import *
+from tools.datasets import *
 
 
 from model_service.pytorch_model_service import PTServingBaseService

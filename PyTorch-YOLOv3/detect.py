@@ -1,8 +1,8 @@
 from __future__ import division
 
 from models import *
-from utils.utils import *
-from utils.datasets import *
+from tools.utils import *
+from tools.datasets import *
 
 import os
 import time

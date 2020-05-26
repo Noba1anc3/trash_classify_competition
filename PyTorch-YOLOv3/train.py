@@ -46,8 +46,8 @@ parser.add_argument("--batch_size", type=int, default=32, help="size of each ima
 parser.add_argument("--n_cpu", type=int, default=8, help="number of cpu threads to use during batch generation")
 
 # 训练
-parser.add_argument('--max_epochs_1', default=5, type=int, help='number of total epochs to run in stage one')
-parser.add_argument('--max_epochs_2', default=20, type=int, help='number of total epochs to run in total')
+parser.add_argument('--max_epochs_1', default=20, type=int, help='number of total epochs to run in stage one')
+parser.add_argument('--max_epochs_2', default=40, type=int, help='number of total epochs to run in total')
 parser.add_argument("--freeze_body_1", type=int, default=2, help="frozen specific layers for stage one")
 parser.add_argument("--freeze_body_2", type=int, default=0, help="frozen specific layers for stage two")
 parser.add_argument("--lr_1", type=float, default=1e-3, help="initial learning rate for stage one")

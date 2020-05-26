@@ -56,7 +56,7 @@ After artificial check, 25 images of testing set is deleted.
 [5,   199, '1.329%'],  [6,   81, '0.541%']
 [7,    48, '0.320%'],  [8,   30, '0.200%']
 [9,    24, '0.160%'],  [12,  15, '0.100%']
-                 ...,  [79,   1, '0.006%']
+                ... ,  [79,   1, '0.006%']
 ```
 
 ## Data Visual Characteristics
@@ -65,6 +65,39 @@ After artificial check, 25 images of testing set is deleted.
 - Image is a part of thing
 - Low resolution
 - Class unbalanced
+
+## Data Anchors Calculation
+clusters:
+```
+ [0.21759225 0.47786703]
+ [0.36999975 0.25625028]
+ [0.52727695 0.537109  ]
+ [0.74499975 0.9161846 ]
+ [0.789062   0.35      ]
+ [0.957031   0.65478175]
+ [0.364      0.85      ]
+ [0.094727   0.073242  ]
+ [0.177474   0.166992  ]
+```
+
+clusters * 416:
+```
+ [ 91. 199.]
+ [154. 107.]
+ [219. 223.]
+ [310. 381.]
+ [328. 146.]
+ [398. 272.]
+ [151. 354.]
+ [ 39.  30.]
+ [ 74.  69.]
+```
+
+Average IoU: 71.90%  
+Average IoU with VOC clusters: 64.36%
+
+Ratios:  
+ [0.43, 0.46, 0.81, 0.98, 1.06, 1.29, 1.44, 1.46, 2.25]
 
 ## Data Augmentation
 - Augmentate Ratio : 0.5

@@ -115,36 +115,37 @@ def get_wh(txt_path, anno_dir, img_dir):
 
     for filename in tqdm(all_filenames):
 
-        filename = filename.split(r'/')[-1].replace('.jpg', '.txt')
+        filename = filename + '.xml'
         txt_anno_path = os.path.join(anno_dir, filename)
-        img_path = os.path.join(img_dir, filename.replace('.txt', '.jpg'))
+        img_path = os.path.join(img_dir, filename.replace('.xml', '.jpg'))
 
-        with open(txt_anno_path, 'r') as f:
+        if os.path.exists(txt_anno_path):
 
-            lines = f.read().splitlines()
+            with open(txt_anno_path, 'r') as f:
+                lines = f.read().splitlines()
 
-            for line in lines:
-                line = line.split(' ')
-                width, height = float(line[3]), float(line[4])
+                for line in lines:
+                    line = line.split(' ')
+                    width, height = float(line[3]), float(line[4])
 
-                # 算法中的数据预处理时会先将图片pad成正方形，然后resize到416*416，框的聚类前也要进行一样的处理
-                # 这一步相当于计算框在pad后的图片上的宽、高
-                img = cv2.imread(img_path)
-                img_height, img_width = img.shape[0], img.shape[1]
-                if img_height > img_width:
-                    width = width * img_width / img_height
-                elif img_height < img_width:
-                    height = height * img_height / img_width
+                    # 算法中的数据预处理时会先将图片pad成正方形，然后resize到416*416，框的聚类前也要进行一样的处理
+                    # 这一步相当于计算框在pad后的图片上的宽、高
+                    img = cv2.imread(img_path)
+                    img_height, img_width = img.shape[0], img.shape[1]
+                    if img_height > img_width:
+                        width = width * img_width / img_height
+                    elif img_height < img_width:
+                        height = height * img_height / img_width
 
-                bboxes.append([width, height])
+                    bboxes.append([width, height])
 
     return np.array(bboxes)
 
 
 def main():
-    txt_path = r'C:\Users\J_M\Desktop\anchors_get\train.txt'  # 训练集文件名
-    anno_dir = r'C:\Users\J_M\Desktop\anchors_get\trainval\labels'  # txt标注目录
-    img_dir = r'C:\Users\J_M\Desktop\anchors_get\trainval\images'  # 图片目录
+    txt_path = r'../PyTorch-YOLOv3/cache/datasets/dataset/VOC2007/ImageSets/Main/trainval.txt'  # 训练集文件名
+    anno_dir = r'../PyTorch-YOLOv3/cache/datasets/trainval/labels'  # txt标注目录
+    img_dir = r'../PyTorch-YOLOv3/cache/datasets/trainval/images'   # 图片目录
     num_clusters = 9
 
     # 从标注文件中加载所有框的w和h，w和h的值需要是归一化后的形式

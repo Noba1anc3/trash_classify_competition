@@ -5,3 +5,4 @@ PyTorch-YOLOv3/.idea
 *.pyc
 *.weights
 *.log
+*.pth

@@ -278,7 +278,7 @@ def valid(model, path, class_names, opt):
 if __name__ == "__main__":
 
     opt = parser.parse_args()
-    opt = prepare_data_on_modelarts(opt)
+    # opt = prepare_data_on_modelarts(opt)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

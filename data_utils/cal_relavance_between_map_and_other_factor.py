@@ -24,4 +24,4 @@ for index in range(len(train)):
             size_map[index][2] = item_map
 
 for item in size_map:
-    print(float(item[2])*2000)
+    print(item[1])

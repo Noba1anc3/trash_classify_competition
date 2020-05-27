@@ -158,8 +158,9 @@ Ratios:
     - Cutout IoU Threshold : 0.5
 
 ## Train Yolo-v3 Model
-[Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/log_analysis/README.md)
+[Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/PyTorch-YOLOv3/README.md)
 
 ## YoLo-v3 Evaluation Logs
-[Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/PyTorch-YOLOv3/README.md)
+[Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/log_analysis/README.md)
+
 

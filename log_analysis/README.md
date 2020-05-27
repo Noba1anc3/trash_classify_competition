@@ -20,21 +20,21 @@
 #### anno num per cls - mAP per cls
 ![](http://m.qpic.cn/psc?/fef49446-40e0-48c4-adcc-654c5015022c/90yfO.8bOadXEE4MiHsPn9NqWq4M1xjDX2dbcIyQVbx4wD53Fi7jb4WmTrd4pqXSwVO3YuuEpYn8Ol2rsZ3TqQ!!/b&bo=JwNtAicDbQIDCSw!&rf=viewer_4)
 
-![](https://s1.ax1x.com/2020/05/27/tE6RGF.md.png)
+<!-- ![](https://s1.ax1x.com/2020/05/27/tE6RGF.md.png) -->
 
 Seems no relevance between anno num and mAP
 
 #### anno size per cls - mAP per cls
 ![](http://m.qpic.cn/psc?/fef49446-40e0-48c4-adcc-654c5015022c/U9VSE8DftkGCrX.UXUSpm4A3MxgRGWaqdEC6qZjKpamqWyIRhvSjvZsZ8E050y9WY*syn8lDHfFMaNfnIqdDRJYrKEFsVvsWullhs3ocC*o!/b&bo=IQNpAiEDaQIDGTw!&rf=viewer_4)
 
-[]:![](https://s1.ax1x.com/2020/05/27/tE6zqI.md.png)
+<!-- ![](https://s1.ax1x.com/2020/05/27/tE6zqI.md.png) -->
 
 Seems no relevance between anno size and mAP
 
 #### anno ratio per cls - mAP per cls
 ![](http://m.qpic.cn/psc?/fef49446-40e0-48c4-adcc-654c5015022c/U9VSE8DftkGCrX.UXUSpm3sPsNqzkXE8YT.mDGBjZppdv65OJkOjXlk1xBNicgt9Hcuavs9pirFDAEaKS9B7*9.ZCG483bAlo0XwKKFwa74!/b&bo=LgNvAi4DbwIDGTw!&rf=viewer_4)
 
-[]:![](https://s1.ax1x.com/2020/05/27/tEcCIf.md.png)
+<!-- ![](https://s1.ax1x.com/2020/05/27/tEcCIf.md.png) -->
 
 Seems some relevance between anno ratio and mAP
 

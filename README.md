@@ -66,7 +66,7 @@ After artificial check, 25 images of testing set is deleted.
 
 ### Average Class Annotation Ratio
 
-| ID | Name         | Ratio      | ID | Name      | Ratio      | ID | Ratio      | Size       | ID | Ratio     | Size       |
+| ID | Name         | Ratio      | ID | Name      | Ratio      | ID | Name       | Ratio      | ID | Name      | Ratio      |
 |:--:|:------------:|:----------:|:--:|:---------:|:----------:|:--:|:----------:|:----------:|:--:|:---------:|:----------:|
 | 1  | 旧衣服       | 0.8224     | 2  | 包        | 0.750      | 3  | 快递纸袋    | 0.743      | 4  | 茶叶渣    |  0.727     |
 | 5  | 砧板         | 0.715      | 6  | 大骨头    | 0.663      | 7  | 菜帮菜叶    | 0.654      | 8  | 枕头      | 0.648      |

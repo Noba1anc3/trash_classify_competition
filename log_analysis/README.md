@@ -1,20 +1,8 @@
 ## Logs
 ### Loss
 - Start Loss : 235
-- Epoch-1 Loss : 66
-- Epoch-2 Loss : 39
-- Epoch-3 Loss : 28
-- Epoch-4 Loss : 24
-- Epoch-5 Loss : 20
-- Epoch-6 Loss : 19
-- Epoch-7 Loss : 19
-- Epoch-8 Loss : 17
-- Epoch-9 Loss : 15
-- Epoch-10 Loss : 15
-- Epoch-11 ~ 27 Loss : 13 ~ 14
 
 ### Evaluation Result
-- Without Pretrained Model
 
 | ID | Time | Name                         | Epoch | Loss | Best mAP       | Purpose                         | Analysis              | Notes  |
 |:--:|:----:|:----------------------------:|:-----:|:----:|:--------------:|:-------------------------------:|:---------------------:|:------:|
@@ -28,4 +16,20 @@
 | 08 | 0526 | 同04(20轮) + 20轮微调　　　　　| 36    | 11.9 | 27.38/29　     | 实验冻结预训练+解除冻结开始微调  | 无法观察到效果提升     | |
 | 08 | 0526 | 同04 + dataset_anchors        | 27    | 12.9 | 27.65/23       | 使用数据集宽高,观察能否带来提升  | 无法观察到效果提升     | 初始map约为10~12 |
 
+### Analysis on the best model trained by Experiment-04 with mAP 29.9 on Evaluation Set
+#### anno num per cls - mAP per cls
+![](http://m.qpic.cn/psc?/fef49446-40e0-48c4-adcc-654c5015022c/90yfO.8bOadXEE4MiHsPn9NqWq4M1xjDX2dbcIyQVbx4wD53Fi7jb4WmTrd4pqXSwVO3YuuEpYn8Ol2rsZ3TqQ!!/b&bo=JwNtAicDbQIDCSw!&rf=viewer_4)
+![](https://s1.ax1x.com/2020/05/27/tE6RGF.md.png)
+
+Seems no relevance between anno num and mAP
+
+#### anno size per cls - mAP per cls
+![](http://m.qpic.cn/psc?/fef49446-40e0-48c4-adcc-654c5015022c/U9VSE8DftkGCrX.UXUSpm4A3MxgRGWaqdEC6qZjKpamqWyIRhvSjvZsZ8E050y9WY*syn8lDHfFMaNfnIqdDRJYrKEFsVvsWullhs3ocC*o!/b&bo=IQNpAiEDaQIDGTw!&rf=viewer_4)
+
+Seems no relevance between anno size and mAP
+
+#### anno ratio per cls - mAP per cls
+![](http://m.qpic.cn/psc?/fef49446-40e0-48c4-adcc-654c5015022c/U9VSE8DftkGCrX.UXUSpm3sPsNqzkXE8YT.mDGBjZppdv65OJkOjXlk1xBNicgt9Hcuavs9pirFDAEaKS9B7*9.ZCG483bAlo0XwKKFwa74!/b&bo=LgNvAi4DbwIDGTw!&rf=viewer_4)
+
+Seems some relevance between anno ratio and mAP
 

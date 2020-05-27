@@ -14,11 +14,19 @@ for i in range(len(classes)-1):
 
 classes_num = []
 for i in range(len(classes)):
-    classes_num.append([classes[i], 0, 0])
+    classes_num.append([classes[i], 0, 0, 0])
 
 
 def takeSecond(elem):
     return elem[1]
+
+
+def takeThird(elem):
+    return elem[2]
+
+
+def takeFourth(elem):
+    return elem[3]
 
 
 def cls_num():
@@ -41,7 +49,48 @@ def cls_num():
         classes_num[i][2] = str((classes_num[i][1]/summ)*100)[:5] + '%'
     classes_num.sort(key=takeSecond, reverse=True)
 
-    print(classes_num)
+    for item in classes_num:
+        print(item[0] + ' : ' + str(item[1]))
+
+
+def cls_area():
+    for filename in filelist:
+
+        xml_path = anno_dir + filename
+
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+        size = root.find('size')
+        size = float(size.find('width').text) * float(size.find('height').text)
+
+        for obj in root.findall('object'):
+            bndbox_name = obj.find('name').text
+
+            bndbox = obj.find('bndbox')
+            bbox_width = float(bndbox.find('xmax').text) - float(bndbox.find('xmin').text)
+            bbox_height = float(bndbox.find('ymax').text) - float(bndbox.find('ymin').text)
+
+            bbox_size = bbox_height*bbox_width
+            box_img_ratio = bbox_size/size
+
+            class_index = classes.index(bndbox_name)
+            classes_num[class_index][1] += 1
+            classes_num[class_index][2] += bbox_size
+            classes_num[class_index][3] += box_img_ratio
+
+    for i in range(len(classes_num)):
+        classes_num[i][2] /= classes_num[i][1]
+        classes_num[i][3] /= classes_num[i][1]
+
+    classes_num.sort(key=takeThird, reverse=True)
+    for i in range(len(classes_num)):
+        print(classes_num[i][0] + ' : ' + str(classes_num[i][2]))
+
+    print('\n')
+
+    classes_num.sort(key=takeFourth, reverse=True)
+    for i in range(len(classes_num)):
+        print(classes_num[i][0] + ' : ' + str(classes_num[i][3]))
 
 
 def box_num():
@@ -70,4 +119,4 @@ def box_num():
 
 cls_num()
 # box_num()
-
+# cls_area()

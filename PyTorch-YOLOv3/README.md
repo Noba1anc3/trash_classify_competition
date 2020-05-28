@@ -47,10 +47,10 @@ Track training progress in Tensorboard:
 $ tensorboard --logdir='logs' --port=6006
 ```
 
-### 创建自定义模型的cfg文件
+### Create customized cfg file
 ```
 $ cd PyTorch-YOLOv3-ModelArts/config
-$ bash create_custom_model.sh <num-classes> #此处已创建，即yolov3-44.cfg
+$ bash create_custom_model.sh <num-classes>
 ```
 
 ## Train on ModelArts

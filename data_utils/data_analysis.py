@@ -93,6 +93,36 @@ def cls_area():
         print(classes_num[i][0] + ' : ' + str(classes_num[i][3]))
 
 
+def wh_ratio():
+    ratio = []
+    tri_ratio = []
+
+    for filename in filelist:
+
+        xml_path = anno_dir + filename
+
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+
+        for obj in root.findall('object'):
+            bndbox = obj.find('bndbox')
+            bbox_width = float(bndbox.find('xmax').text) - float(bndbox.find('xmin').text)
+            bbox_height = float(bndbox.find('ymax').text) - float(bndbox.find('ymin').text)
+
+            wh_ratio = round(bbox_width / bbox_height, 2)
+
+            if wh_ratio not in ratio:
+                ratio.append(wh_ratio)
+                tri_ratio.append([wh_ratio, 1])
+            else:
+                tri_ratio[ratio.index(wh_ratio)][1] += 1
+
+    tri_ratio.sort()
+    for item in tri_ratio:
+        if item[1] > 149:
+            print(item[1])
+
+
 def box_num():
     box_in_img = []
     for i in range(80):  # 最多79个框
@@ -117,6 +147,8 @@ def box_num():
     print(box_in_img)
 
 
-cls_num()
+# cls_num()
 # box_num()
 # cls_area()
+
+wh_ratio()

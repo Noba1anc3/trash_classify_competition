@@ -4,6 +4,9 @@
 ## Data Analysis
 [Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/data_utils/data.md)
 
+## Survey on Object Detection Task
+[Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/survey.md)
+
 ## Yolo-v3
 ### Yolo-v3 Model
 [Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/PyTorch-YOLOv3/README.md)

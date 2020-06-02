@@ -14,4 +14,5 @@
 ### YoLo-v3 Evaluation Logs
 [Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/log_analysis/README.md)
 
-
+## mmdetection
+[Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/mmdetection/README.md)

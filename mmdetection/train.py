@@ -76,7 +76,7 @@ def main():
     # 安装依赖
     root_dir = os.path.dirname(__file__)
     mmcv_path = os.path.join(root_dir, 'mmcv-0.5.8-cp36-cp36m-linux_x86_64.whl')
-    mmdet_path = os.path.join(root_dir, 'mmdet-2.0.0+29f3617-cp36-cp36m-linux_x86_64.whl')
+    mmdet_path = os.path.join(root_dir, 'mmdet-2.0.0+unknown-cp36-cp36m-linux_x86_64.whl')
     os.system(f'pip install {mmcv_path}; pip install {mmdet_path}')
 
     # 导入
@@ -135,21 +135,21 @@ def main():
     # 新增
     parser.add_argument('--local_data_root', default='/cache/', type=str,
                         help='a directory used for transfer data between local path and OBS path')
-    # parser.add_argument('--data_url', required=True, type=str,
-    #                     help='the training and validation data path')
+    parser.add_argument('--data_url', required=True, type=str,
+                        help='the training and validation data path')
     parser.add_argument('--data_local', default='', type=str,
                         help='the training and validation data path on local')
     parser.add_argument('--train_local', default='', type=str,
                         help='the training output results on local')
-    # parser.add_argument('--train_url', required=True, type=str,
-    #                     help='the path to save training outputs')
+    parser.add_argument('--train_url', required=True, type=str,
+                        help='the path to save training outputs')
     parser.add_argument('--init_method', default='', type=str, help='the training output results on local')
 
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
 
-    # args = prepare_data_on_modelarts(args)
+    args = prepare_data_on_modelarts(args)
 
     cfg = Config.fromfile(args.config)
     if args.options is not None:

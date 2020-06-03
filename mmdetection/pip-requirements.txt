@@ -1,8 +1,3 @@
-torch==1.3.0
-torchvision
-mmcv
-numpy
-terminaltables
+numpy==1.17
+torch==1.3
 pycocotools
-
-

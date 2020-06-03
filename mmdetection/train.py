@@ -75,12 +75,12 @@ def main():
 
     # 安装依赖
     root_dir = os.path.dirname(__file__)
-    # mmcv_path = os.path.join(root_dir, 'mmcv-0.5.8-cp36-cp36m-linux_x86_64.whl')
-    # mmdet_path = os.path.join(root_dir, 'mmdet-2.0.0+unknown-cp36-cp36m-linux_x86_64.whl')
-    # os.system(f'pip install {mmcv_path}; pip install {mmdet_path}')
-    mmdet_path = os.path.join(root_dir, 'mmdetection.zip')
-    os.system(f'unzip {mmdet_path}')
-    os.system(f'cd {root_dir} \n python setup.py develop')
+    mmcv_path = os.path.join(root_dir, 'mmcv-0.5.8-cp36-cp36m-linux_x86_64.whl')
+    mmdet_path = os.path.join(root_dir, 'mmdet-2.0.0+unknown-cp36-cp36m-linux_x86_64.whl')
+    os.system(f'pip install {mmcv_path}; pip install {mmdet_path}')
+    # mmdet_path = os.path.join(root_dir, 'mmdetection.zip')
+    # os.system(f'unzip {mmdet_path}')
+    # os.system(f'cd {root_dir} \n python setup.py develop')
 
     # 导入
     import mmcv
@@ -99,7 +99,7 @@ def main():
                         help='train config file path')
     parser.add_argument('--work-dir', default='work_dir', help='the dir to save logs and models')
     parser.add_argument(
-        '--resume-from', default='',
+        '--resume-from', default='', type=str,
         help='the checkpoint file to resume from')
     parser.add_argument(
         '--no-validate',

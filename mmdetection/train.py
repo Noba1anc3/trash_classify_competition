@@ -79,20 +79,19 @@ def main():
     # mmdet_path = os.path.join(root_dir, 'mmdet-2.0.0+unknown-cp36-cp36m-linux_x86_64.whl')
     # os.system(f'pip install {mmcv_path}; pip install {mmdet_path}')
     mmdet_path = os.path.join(root_dir, 'mmdetection.zip')
-    print(os.listdir('.'))
     os.system(f'unzip {mmdet_path}')
-    os.system(f'cd {mmdet_path[:-4]} \n python setup.py develop')
+    os.system(f'cd {root_dir} \n python setup.py develop')
 
     # 导入
     import mmcv
     from mmcv import Config, DictAction
     # from mmcv.runner import init_dist  分布式才用的到
 
-    from mmdetection import __version__
-    from mmdetection.apis import set_random_seed, train_detector
-    from mmdetection.datasets import build_dataset
-    from mmdetection.models import build_detector
-    from mmdetection.utils import collect_env, get_root_logger
+    from mmdet import __version__
+    from mmdet.apis import set_random_seed, train_detector
+    from mmdet.datasets import build_dataset
+    from mmdet.models import build_detector
+    from mmdet.utils import collect_env, get_root_logger
 
     # 参数
     parser = argparse.ArgumentParser(description='Train a detector')

@@ -1,6 +1,7 @@
 ## mmdetection
 
 ## Customized Task
+- mmdet/datasets/voc.py : CLASSES
 - mmdet/core/evaluation/class_names.py : voc_classes()
 - configs/_base_/models/cascade_rcnn_r50_fpn.py : model['roi_head']['bbox_head']['num_classes']
 - configs/_base_/schedules/schedule_*.py : total_epochs - 12                     # epochs

@@ -1,4 +1,15 @@
 ## mmdetection
+
+## Customized Task
+- mmdet/core/evaluation/class_names.py : voc_classes()
+- configs/_base_/schedules/schedule_*.py : total_epochs - 12                     # epochs
+- configs/_base_/datasets/vov0712.py : classes ? 
+- configs/_base_/datasets/vov0712.py : data_root 
+- configs/_base_/datasets/voc0712.py : data['samples_per_gpu']                   # batchsize
+- configs/_base_/datasets/vov0712.py : data['train']['times']
+- configs/_base_/datasets/vov0712.py : data['train']['dataset']['ann_file']
+- configs/_base_/datasets/vov0712.py : data['train']['dataset']['img_prefix']
+
 ## To whl
 As compile not permitted in the deploy phase on Huawei ModelArts Platform, we need to pack mmdetection to whl file
 

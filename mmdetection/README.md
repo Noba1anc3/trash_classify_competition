@@ -4,7 +4,6 @@
 - mmdet/core/evaluation/class_names.py : voc_classes()
 - configs/_base_/models/cascade_rcnn_r50_fpn.py : model['roi_head']['bbox_head']['num_classes']
 - configs/_base_/schedules/schedule_*.py : total_epochs - 12                     # epochs
-- configs/_base_/datasets/vov0712.py : classes ? 
 - configs/_base_/datasets/vov0712.py : data_root 
 - configs/_base_/datasets/voc0712.py : data['samples_per_gpu']                   # batchsize
 - configs/_base_/datasets/vov0712.py : data['train']['times']

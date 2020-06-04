@@ -1,15 +1,32 @@
-import copy
 import os
 import os.path as osp
+import copy
 import time
-import argparse
-
 import torch
+import argparse
 
 try:
     import moxing as mox
 except:
     print('not use moxing')
+
+# 安装依赖
+root_dir = os.path.dirname(__file__)
+mmcv_path = os.path.join(root_dir, 'mmcv-0.5.8-cp36-cp36m-linux_x86_64.whl')
+mmdet_path = os.path.join(root_dir, 'mmdet-2.0.0+unknown-cp36-cp36m-linux_x86_64.whl')
+os.system(f'pip install {mmcv_path}; pip install {mmdet_path}')
+# mmdet_path = os.path.join(root_dir, 'mmdetection.zip')
+# os.system(f'unzip {mmdet_path}')
+# os.system(f'cd {root_dir} \n python setup.py develop')
+
+import mmcv
+from mmcv import Config, DictAction
+# from mmcv.runner import init_dist  分布式才用的到
+from mmdet import __version__
+from mmdet.apis import set_random_seed, train_detector
+from mmdet.datasets import build_dataset
+from mmdet.models import build_detector
+from mmdet.utils import collect_env, get_root_logger
 
 
 def prepare_data_on_modelarts(args):
@@ -71,29 +88,7 @@ def prepare_data_on_modelarts(args):
     return args
 
 
-def main():
-
-    # 安装依赖
-    root_dir = os.path.dirname(__file__)
-    mmcv_path = os.path.join(root_dir, 'mmcv-0.5.8-cp36-cp36m-linux_x86_64.whl')
-    mmdet_path = os.path.join(root_dir, 'mmdet-2.0.0+unknown-cp36-cp36m-linux_x86_64.whl')
-    os.system(f'pip install {mmcv_path}; pip install {mmdet_path}')
-    # mmdet_path = os.path.join(root_dir, 'mmdetection.zip')
-    # os.system(f'unzip {mmdet_path}')
-    # os.system(f'cd {root_dir} \n python setup.py develop')
-
-    # 导入
-    import mmcv
-    from mmcv import Config, DictAction
-    # from mmcv.runner import init_dist  分布式才用的到
-
-    from mmdet import __version__
-    from mmdet.apis import set_random_seed, train_detector
-    from mmdet.datasets import build_dataset
-    from mmdet.models import build_detector
-    from mmdet.utils import collect_env, get_root_logger
-
-    # 参数
+def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
     parser.add_argument('--config', default='configs/cascade_rcnn/cascade_rcnn_r50_fpn_1x_coco.py',
                         help='train config file path')
@@ -149,9 +144,15 @@ def main():
     parser.add_argument('--init_method', default='', type=str, help='the training output results on local')
 
     args = parser.parse_args()
+
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
 
+    return args
+
+
+def main():
+    args = parse_args()
     args = prepare_data_on_modelarts(args)
 
     cfg = Config.fromfile(args.config)

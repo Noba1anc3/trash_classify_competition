@@ -6,7 +6,7 @@
 - mmdet/core/evaluation/class_names.py
   - voc_classes()
 - configs/base/models/cascade_rcnn_r50_fpn.py
-  - # pretrained='torchvision://resnet50',
+  - pretrained='torchvision://resnet50',
   - model['roi_head']['bbox_head']['num_classes']
 - configs/base/schedules/schedule_*.py
   - total_epochs - 12
@@ -30,7 +30,7 @@ File: mmdet-2.0.0+unknown-cp36-cp36m-linux_x86_64.whl is packed on ModelArts Pla
 
 ### Requirements
 - With whl: pip-requirements.txt
-- Without whl (Online Develop): pip-requirements-without-whl
+- Without whl (Online Develop): pip-requirements-without-whl.txt
 
 ### model
 #### 80 cls

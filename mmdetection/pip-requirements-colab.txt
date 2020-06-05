@@ -1,0 +1,19 @@
+!git clone https://github.com/Noba1anc3/trash_classify_competition.git
+cd trash_classify_competition/mmdetection
+
+from google.colab import drive
+drive.mount('/content/drive/')
+
+cp ../../drive/'My Drive'/VOCdevkit.zip .
+!unzip VOCdevkit.zip
+
+!git clone https://github.com/open-mmlab/mmdetection.git
+cd mmdetection
+!pip install mmcv
+!pip install -r requirements/build.txt
+!pip install "git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI"
+!python setup.py develop
+
+cd ..
+!python train.py
+

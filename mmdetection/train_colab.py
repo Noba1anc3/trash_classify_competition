@@ -28,10 +28,8 @@ def prepare_data_on_modelarts(args):
     将OBS上的数据拷贝到ModelArts中
     """
     # 拷贝预训练参数文件
-
     # 默认使用ModelArts中的如下两个路径用于存储数据：
-    # 0) /cache/model: 如果适用预训练模型，存储从OBS拷贝过来的预训练模型
-    # 1）/cache/datasets: 存储从OBS拷贝过来的训练数据
+    # 1) /cache/model: 如果适用预训练模型，存储从OBS拷贝过来的预训练模型
     # 2）/cache/log: 存储训练日志和训练模型，并且在训练结束后，该目录下的内容会被全部拷贝到OBS
 
     # mox.file.copy可同时兼容本地和OBS路径的拷贝操作
@@ -43,21 +41,21 @@ def prepare_data_on_modelarts(args):
     args.work_dir = os.path.join(root_dir, args.work_dir)
 
     # 创建文件夹
-    for path in [os.path.join(args.local_data_root, p) for p in ['model', 'datasets', 'log']]:
+    for path in [os.path.join(args.local_data_root, p) for p in ['model', 'log']]:
         if not os.path.exists(path):
             os.makedirs(path)
 
-    # 预训练模型拷贝到/cache/model
+    # 预训练模型拷贝到/output/model
     if args.resume_from:
         args.resume_from = os.path.join(root_dir, args.resume_from)
         _, weights_name = os.path.split(args.resume_from)
         mox.file.copy(args.resume_from, os.path.join(args.local_data_root, 'model/' + weights_name))
         args.resume_from = os.path.join(args.local_data_root, 'model/' + weights_name)
 
-    # 创建日志文件夹/cache/log
-    args.train_local = os.path.join(args.local_data_root, 'log/')
-    if not os.path.exists(args.train_local):
-        os.mkdir(args.train_local)
+    # 创建日志文件夹/output/log
+    args.log_path = os.path.join(args.local_data_root, 'log/')
+    if not os.path.exists(args.log_path):
+        os.mkdir(args.log_path)
 
     return args
 
@@ -105,7 +103,7 @@ def parse_args():
         help='automatically scale lr with the number of gpus')
 
     # 新增
-    parser.add_argument('--local_data_root', default='/output/', type=str,
+    parser.add_argument('--local_data_root', default='./output', type=str,
                         help='a directory used for transfer data between local path and OBS path')
 
     args = parser.parse_args()
@@ -208,7 +206,6 @@ def main():
     # add an attribute for visualization convenience
     model.CLASSES = datasets[0].CLASSES
 
-    
     train_detector(model,datasets,cfg,distributed=distributed,validate=(not args.no_validate),timestamp=timestamp,meta=meta)
 
 

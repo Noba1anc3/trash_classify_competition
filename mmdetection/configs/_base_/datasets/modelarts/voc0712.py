@@ -1,6 +1,6 @@
 # dataset settings
 dataset_type = 'VOCDataset'
-data_root = './VOCdevkit/'  # '/cache/datasets/VOCdevkit/' in modelarts
+data_root = '/cache/datasets/VOCdevkit/'
 classes = (
     '一次性快餐盒', '书籍纸张', '充电宝', '剩饭剩菜', '包', '垃圾桶', '塑料器皿', '塑料玩具', '塑料衣架', '大骨头', '干电池',
     '快递纸袋', '插头电线', '旧衣服', '易拉罐', '枕头', '果皮果肉', '毛绒玩具', '污损塑料', '污损用纸', '洗护用品', '烟蒂',

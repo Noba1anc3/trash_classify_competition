@@ -237,23 +237,13 @@ def main():
     # add an attribute for visualization convenience
     model.CLASSES = datasets[0].CLASSES
 
-    try:
-        train_detector(
-            model,
-            datasets,
-            cfg,
-            distributed=distributed,
-            validate=(not args.no_validate),
-            timestamp=timestamp,
-            meta=meta)
-    except Exception:
-        print('training interrupted in advance')
-    finally:
-        # 将work_dir复制到obs中
-        target_dir = os.path.join(args.train_url, 'work_dir')
-        if not os.path.exists(target_dir):
-            os.makedirs(target_dir)
-        mox.file.copy_parallel(args.work_dir, target_dir)
+    train_detector(model,datasets,cfg,distributed=distributed,validate=(not args.no_validate),timestamp=timestamp,meta=meta)
+
+    # 将work_dir复制到obs中
+    target_dir = os.path.join(args.train_url, 'work_dir')
+    if not os.path.exists(target_dir):
+        os.makedirs(target_dir)
+    mox.file.copy_parallel(args.work_dir, target_dir)
 
 
 if __name__ == '__main__':

@@ -9,7 +9,6 @@
   - pretrained='torchvision://resnet50',
   - model['roi_head']['bbox_head']['num_classes']
 - configs/base/schedules/schedule_*.py
-  - total_epochs - 12
 - configs/base/datasets/vov0712.py
   - data_root 
   - data['samples_per_gpu']

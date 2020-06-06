@@ -32,7 +32,6 @@ File: mmdet-2.0.0+unknown-cp36-cp36m-linux_x86_64.whl is packed on ModelArts Pla
 - Without whl (Online Develop): pip-requirements-without-whl.txt
 
 ### model
-#### 80 cls
-- [cascade_rcnn_r50_fpn_1x_coco_20200316-3dc56deb.pth](https://bhpan.buaa.edu.cn:443/link/355651E5E64263BA8BBEA717A309B4AD)
 #### 44 cls
 - [resnet50-19c8e357.pth](https://bhpan.buaa.edu.cn:443/link/D74B0212071B1C26482F1689B6294626)
+- [resnet101-5d3b4d8f.pth](https://download.pytorch.org/models/resnet101-5d3b4d8f.pth)

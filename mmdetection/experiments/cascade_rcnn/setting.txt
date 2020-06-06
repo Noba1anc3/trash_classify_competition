@@ -1,5 +1,5 @@
 train_phase:
-batch = 8
-sgd(lr = 1e-2)
+batch = 4
+sgd(lr = 2e-2)
 lr_step = 8, 11
 epochs = 20

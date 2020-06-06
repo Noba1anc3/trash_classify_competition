@@ -15,4 +15,8 @@
 [Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/log_analysis/README.md)
 
 ## mmdetection
+### Usage
 [Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/mmdetection/README.md)
+
+### Experiments
+[Documentation](https://github.com/Noba1anc3/trash_classify_competition/tree/master/mmdetection/experiments/Experiments.md)

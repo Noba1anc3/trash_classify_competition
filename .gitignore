@@ -4,5 +4,4 @@ PyTorch-YOLOv3/output
 PyTorch-YOLOv3/.idea
 *.pyc
 *.weights
-*.log
 *.pth

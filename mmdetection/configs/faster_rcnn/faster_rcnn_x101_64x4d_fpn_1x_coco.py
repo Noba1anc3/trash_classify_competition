@@ -1,6 +1,6 @@
 _base_ = './faster_rcnn_r50_fpn_1x_coco.py'
 model = dict(
-    pretrained='open-mmlab://resnext101_64x4d',
+    #pretrained='open-mmlab://resnext101_64x4d',
     backbone=dict(
         type='ResNeXt',
         depth=101,

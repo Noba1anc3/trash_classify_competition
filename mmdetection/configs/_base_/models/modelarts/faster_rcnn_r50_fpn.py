@@ -1,6 +1,6 @@
 model = dict(
     type='FasterRCNN',
-    pretrained='/cache/model/resnet50-19c8e357.pth',
+    pretrained='/cache/model/resnext101_64x4d-ee2c6f71.pth',
     backbone=dict(
         type='ResNet',
         depth=50,

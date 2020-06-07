@@ -1,11 +1,15 @@
 ## mAP Table
 
-|    Backbone     | Faster RCNN   | Cascade RCNN | Cascade Mask RCNN |   Mask RCNN    | RetinaNet |
-| :-------------: | :-----------: | :----------: | :---------------: | :------------: | :-------: |
-|    R-50-FPN     | 70.01 / 61.36 | 70.9 / 58.65 |  Task Different   | Task Different |     0     |
-|    R-101-FPN    |               |              |  Task Different   | Task Different |     0     |
-| X-101-32x4d FPN |               |              |  Task Different   | Task Different |     0     |
-| X-101-64x4d FPN |               |              |  Task Different   | Task Different |     0     |
+|    Backbone     | Faster-RCNN   | Cascade-RCNN |
+| :-------------: | :-----------: | :----------: |
+|    R-50-FPN     | 70.01 / 61.36 | 70.9 / 58.65 |
+|    R-101-FPN    |               |              |
+| X-101-32x4d FPN |               |              |
+| X-101-64x4d FPN |               |              |
+
+Note:  
+- Task Different: Mask RCNN / Cascade Mask RCNN
+- Low Performance: RPN, Fast RCNN, SSD, RetinaNet, double_head_rcnn, PAFPN
 
 ## Configs
 ## Cascade-RCNN-R-50-FPN

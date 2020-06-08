@@ -16,7 +16,27 @@
   - data['train']['dataset']['ann_file']
   - data['train']['dataset']['img_prefix']
 
-### To whl
+### Run on Colab
+
+#### Requirements
+
+##### Instruction
+```
+pip-requirements-colab.txt
+```
+
+##### mmcv
+In case of eruption in colab kernel, mmcv is not installed by pip in requirements, but already in the folder mmcv.
+In this folder, checkpoint and log file will output into Google Drive, instead of `work_dir` set in train_colab.py.
+
+#### Train
+```
+python train_colab.py
+```
+
+### Run on Huawei-ModelArts
+
+#### To whl
 As compile not permitted in the deploy phase on Huawei ModelArts Platform, we need to pack mmdetection to whl file
 
 ```
@@ -27,10 +47,15 @@ python setup.py bdist_wheel
 
 File: mmdet-2.0.0+unknown-cp36-cp36m-linux_x86_64.whl is packed on ModelArts Platform
 
-### Requirements
-- With whl: pip-requirements.txt
-- Without whl (Online Develop): pip-requirements-without-whl.txt
-- Without whl (Colab): pip-requirements-colab.txt
+#### Requirements
+- With whl: `pip-requirements.txt`
+- Without whl (Online Develop): `pip-requirements-without-whl.txt`
+
+#### Train
+Delete mmcv folder and then run the python file.
+```
+python train-modelarts.py
+```
 
 ### pretrained model
 - [resnet50-19c8e357.pth](https://bhpan.buaa.edu.cn:443/link/D74B0212071B1C26482F1689B6294626)

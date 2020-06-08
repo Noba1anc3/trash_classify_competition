@@ -264,7 +264,7 @@ class Runner(object):
         filepath = osp.join(out_dir, filename)
         optimizer = self.optimizer if save_optimizer else None
         save_checkpoint(self.model, filepath, optimizer=optimizer, meta=meta)
-        save_checkpoint(self.model, '../../drive/My Drive/work_dir', optimizer=optimizer, meta=meta)
+        os.system(f'cp {filepath} ../../drive/\'My Drive\'/')
         # in some environments, `os.symlink` is not supported, you may need to
         # set `create_symlink` to False
         if create_symlink:

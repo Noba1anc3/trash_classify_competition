@@ -35,4 +35,4 @@ File: mmdet-2.0.0+unknown-cp36-cp36m-linux_x86_64.whl is packed on ModelArts Pla
 ### pretrained model
 - [resnet50-19c8e357.pth](https://bhpan.buaa.edu.cn:443/link/D74B0212071B1C26482F1689B6294626)
 - [resnet101-5d3b4d8f.pth](https://bhpan.buaa.edu.cn:443/link/D9537C99C11CE4B645B9EE50E4923485)
-- [resnext101_64x4d-ee2c6f71](https://bhpan.buaa.edu.cn:443/link/52DD4E7BA15D4509E3631700D1D2B84F)
+- [resnext101_64x4d-ee2c6f71.pth](https://bhpan.buaa.edu.cn:443/link/52DD4E7BA15D4509E3631700D1D2B84F)

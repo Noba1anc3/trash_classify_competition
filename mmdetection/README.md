@@ -26,8 +26,8 @@ pip-requirements-colab.txt
 ```
 
 ##### mmcv
-In case of eruption in colab kernel, mmcv is not installed by pip in requirements, but already in the folder mmcv.
-In this folder, checkpoint and log file will output into Google Drive, instead of `work_dir` set in train_colab.py.
+In case of eruption in colab kernel, mmcv is not installed by pip in requirements, but already in the folder mmcv.  
+checkpoint and log file will output into Google Drive automatically, instead of `work_dir` set in train_colab.py.
 
 #### Train
 ```

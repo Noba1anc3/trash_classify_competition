@@ -2,7 +2,7 @@
 import logging
 import os.path as osp
 import time
-
+import os
 import torch
 
 import mmcv
@@ -264,7 +264,7 @@ class Runner(object):
         filepath = osp.join(out_dir, filename)
         optimizer = self.optimizer if save_optimizer else None
         save_checkpoint(self.model, filepath, optimizer=optimizer, meta=meta)
-        os.system(f'cp {filepath} ../../drive/\'My Drive\'/')
+        os.system(f'cp {filepath} ../../drive/\'My Drive\'/work_dir/')
         # in some environments, `os.symlink` is not supported, you may need to
         # set `create_symlink` to False
         if create_symlink:
@@ -382,7 +382,7 @@ class Runner(object):
                     if mode == 'train' and self.epoch >= max_epochs:
                         return
                     epoch_runner(data_loaders[i], **kwargs)
-
+            # os.system('cp -r ./work_dir/ ../../drive/\'My Drive\'/')
         time.sleep(1)  # wait for some hooks like loggers to finish
         self.call_hook('after_run')
 

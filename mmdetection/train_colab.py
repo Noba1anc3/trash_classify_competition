@@ -23,46 +23,9 @@ from mmdet.models import build_detector
 from mmdet.utils import collect_env, get_root_logger
 
 
-def prepare_data_on_modelarts(args):
-    """
-    将OBS上的数据拷贝到ModelArts中
-    """
-    # 拷贝预训练参数文件
-    # 默认使用ModelArts中的如下两个路径用于存储数据：
-    # 1) /cache/model: 如果适用预训练模型，存储从OBS拷贝过来的预训练模型
-    # 2）/cache/log: 存储训练日志和训练模型，并且在训练结束后，该目录下的内容会被全部拷贝到OBS
-
-    # mox.file.copy可同时兼容本地和OBS路径的拷贝操作
-    # 拷贝一个目录得用copy_parallel接口
-
-    # 相对路径变绝对路径
-    root_dir = os.path.dirname(__file__)
-    args.config = os.path.join(root_dir, args.config)
-    args.work_dir = os.path.join(root_dir, args.work_dir)
-
-    # 创建文件夹
-    for path in [os.path.join(args.local_data_root, p) for p in ['model', 'log']]:
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-    # 预训练模型拷贝到/output/model
-    if args.resume_from:
-        args.resume_from = os.path.join(root_dir, args.resume_from)
-        _, weights_name = os.path.split(args.resume_from)
-        mox.file.copy(args.resume_from, os.path.join(args.local_data_root, 'model/' + weights_name))
-        args.resume_from = os.path.join(args.local_data_root, 'model/' + weights_name)
-
-    # 创建日志文件夹/output/log
-    args.log_path = os.path.join(args.local_data_root, 'log/')
-    if not os.path.exists(args.log_path):
-        os.mkdir(args.log_path)
-
-    return args
-
-
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
-    parser.add_argument('--config', default='configs/cascade_rcnn/cascade_rcnn_r50_fpn_1x_coco.py',
+    parser.add_argument('--config', default='configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py',
                         help='train config file path')
     parser.add_argument('--work-dir', default='work_dir', help='the dir to save logs and models')
     parser.add_argument(
@@ -116,7 +79,6 @@ def parse_args():
 
 def main():
     args = parse_args()
-    args = prepare_data_on_modelarts(args)
 
     cfg = Config.fromfile(args.config)
     if args.options is not None:

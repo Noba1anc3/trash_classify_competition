@@ -3,7 +3,7 @@
 |    Backbone     | Faster-RCNN   | Cascade-RCNN |
 | :-------------: | :-----------: | :----------: |
 |    R-50-FPN     | 70.01 / 61.36 | 70.9 / 58.65 |
-|    R-101-FPN    | 71.21 / 61.39 | 72.1 /  TBD  |
+|    R-101-FPN    | 71.21 / 61.46 | 72.1 /  TBD  |
 | X-101-32x4d FPN |               | 67.5 / 54.70 |
 
 Note:  
@@ -60,7 +60,8 @@ Note:
     - best_epoch=13/17
 - Inference
     - resize = 1000*600
-    - nms_pre=500
-    - nms_post=500
-    - max_num=500
-    - time = 2h43m
+    - nms_pre=500/700
+    - nms_post=500/700
+    - max_num=500/700
+    - time = 2h43m/2h53m
+    - score = 61.39/61.46

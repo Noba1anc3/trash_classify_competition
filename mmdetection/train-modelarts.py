@@ -52,7 +52,8 @@ def prepare_data_on_modelarts(args):
 
     # 预训练模型拷贝到/cache/model
     if args.resume_from:
-        args.resume_from = os.path.join(root_dir, args.resume_from)
+        # 如若从output下取模型文件，使用绝对路径，则删除下面一行
+        # args.resume_from = os.path.join(root_dir, args.resume_from)
         _, weights_name = os.path.split(args.resume_from)
         mox.file.copy(args.resume_from, os.path.join(args.local_data_root, 'model/' + weights_name))
         args.resume_from = os.path.join(args.local_data_root, 'model/' + weights_name)
@@ -168,6 +169,10 @@ def main():
         # use config filename as default work_dir if cfg.work_dir is None
         cfg.work_dir = osp.join('./work_dirs',
                                 osp.splitext(osp.basename(args.config))[0])
+    
+    # 用于加载已训练模型
+    if args.resume_from:
+        cfg.resume_from = args.resume_from
 
     if args.gpu_ids is not None:
         cfg.gpu_ids = args.gpu_ids

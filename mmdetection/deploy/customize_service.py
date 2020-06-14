@@ -25,7 +25,7 @@ class ObjectDetectionService(PTServingBaseService):
         # make sure these files exist
         self.model_name = model_name
         self.checkpoint = os.path.join(os.path.dirname(__file__), 'model.pth')
-        self.config = os.path.join(os.path.dirname(__file__), 'configs/faster_rcnn/faster_rcnn_r101_fpn_1x_coco.py')
+        self.config = os.path.join(os.path.dirname(__file__), 'configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py')
         self.label_map = parse_classify_rule(os.path.join(os.path.dirname(__file__), 'classify_rule.json'))
 
         self.model = init_detector(self.config, checkpoint=self.checkpoint, device='cpu')

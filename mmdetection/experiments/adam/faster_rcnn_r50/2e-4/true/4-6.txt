@@ -1,0 +1,550 @@
+2020-06-09 23:32:49,432 - mmdet - INFO - Environment info:
+------------------------------------------------------------
+sys.platform: linux
+Python: 3.6.4 |Anaconda, Inc.| (default, Jan 16 2018, 18:10:19) [GCC 7.2.0]
+CUDA available: True
+CUDA_HOME: /usr/local/cuda
+NVCC: Cuda compilation tools, release 10.0, V10.0.130
+GPU 0: Tesla V100-PCIE-32GB
+GCC: gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609
+PyTorch: 1.3.0+cu100
+PyTorch compiling details: PyTorch built with:
+  - GCC 7.3
+  - Intel(R) Math Kernel Library Version 2019.0.4 Product Build 20190411 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v0.20.5 (Git Hash 0125f28c61c1f822fd48570b4c1066f96fcb9b2e)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CUDA Runtime 10.0
+  - NVCC architecture flags: -gencode;arch=compute_35,code=sm_35;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_50,code=compute_50
+  - CuDNN 7.6.3
+  - Magma 2.5.1
+  - Build settings: BLAS=MKL, BUILD_NAMEDTENSOR=OFF, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -fopenmp -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -O2 -fPIC -Wno-narrowing -Wall -Wextra -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Wno-stringop-overflow, DISABLE_NUMA=1, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=True, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+TorchVision: 0.4.1+cu100
+OpenCV: 3.4.1
+MMCV: 0.5.8
+MMDetection: 2.0.0+unknown
+MMDetection Compiler: GCC 5.4
+MMDetection CUDA Compiler: 10.0
+------------------------------------------------------------
+
+2020-06-09 23:32:49,432 - mmdet - INFO - Distributed training: False
+2020-06-09 23:32:50,607 - mmdet - INFO - Config:
+model = dict(
+    type='FasterRCNN',
+    pretrained='/cache/model/resnet50-19c8e357.pth',
+    backbone=dict(
+        type='ResNet',
+        depth=50,
+        num_stages=4,
+        out_indices=(0, 1, 2, 3),
+        frozen_stages=1,
+        norm_cfg=dict(type='BN', requires_grad=True),
+        norm_eval=True,
+        style='pytorch'),
+    neck=dict(
+        type='FPN',
+        in_channels=[256, 512, 1024, 2048],
+        out_channels=256,
+        num_outs=5),
+    rpn_head=dict(
+        type='RPNHead',
+        in_channels=256,
+        feat_channels=256,
+        anchor_generator=dict(
+            type='AnchorGenerator',
+            scales=[8],
+            ratios=[0.5, 1.0, 2.0],
+            strides=[4, 8, 16, 32, 64]),
+        bbox_coder=dict(
+            type='DeltaXYWHBBoxCoder',
+            target_means=[0.0, 0.0, 0.0, 0.0],
+            target_stds=[1.0, 1.0, 1.0, 1.0]),
+        loss_cls=dict(
+            type='CrossEntropyLoss', use_sigmoid=True, loss_weight=1.0),
+        loss_bbox=dict(type='L1Loss', loss_weight=1.0)),
+    roi_head=dict(
+        type='StandardRoIHead',
+        bbox_roi_extractor=dict(
+            type='SingleRoIExtractor',
+            roi_layer=dict(type='RoIAlign', out_size=7, sample_num=0),
+            out_channels=256,
+            featmap_strides=[4, 8, 16, 32]),
+        bbox_head=dict(
+            type='Shared2FCBBoxHead',
+            in_channels=256,
+            fc_out_channels=1024,
+            roi_feat_size=7,
+            num_classes=44,
+            bbox_coder=dict(
+                type='DeltaXYWHBBoxCoder',
+                target_means=[0.0, 0.0, 0.0, 0.0],
+                target_stds=[0.1, 0.1, 0.2, 0.2]),
+            reg_class_agnostic=False,
+            loss_cls=dict(
+                type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
+            loss_bbox=dict(type='L1Loss', loss_weight=1.0))))
+train_cfg = dict(
+    rpn=dict(
+        assigner=dict(
+            type='MaxIoUAssigner',
+            pos_iou_thr=0.7,
+            neg_iou_thr=0.3,
+            min_pos_iou=0.3,
+            match_low_quality=True,
+            ignore_iof_thr=-1),
+        sampler=dict(
+            type='RandomSampler',
+            num=256,
+            pos_fraction=0.5,
+            neg_pos_ub=-1,
+            add_gt_as_proposals=False),
+        allowed_border=-1,
+        pos_weight=-1,
+        debug=False),
+    rpn_proposal=dict(
+        nms_across_levels=False,
+        nms_pre=2000,
+        nms_post=1000,
+        max_num=1000,
+        nms_thr=0.7,
+        min_bbox_size=0),
+    rcnn=dict(
+        assigner=dict(
+            type='MaxIoUAssigner',
+            pos_iou_thr=0.5,
+            neg_iou_thr=0.5,
+            min_pos_iou=0.5,
+            match_low_quality=False,
+            ignore_iof_thr=-1),
+        sampler=dict(
+            type='RandomSampler',
+            num=512,
+            pos_fraction=0.25,
+            neg_pos_ub=-1,
+            add_gt_as_proposals=True),
+        pos_weight=-1,
+        debug=False))
+test_cfg = dict(
+    rpn=dict(
+        nms_across_levels=False,
+        nms_pre=1000,
+        nms_post=1000,
+        max_num=1000,
+        nms_thr=0.7,
+        min_bbox_size=0),
+    rcnn=dict(
+        score_thr=0.05, nms=dict(type='nms', iou_thr=0.5), max_per_img=100))
+dataset_type = 'VOCDataset'
+data_root = '/cache/datasets/VOCdevkit/'
+classes = ('一次性快餐盒', '书籍纸张', '充电宝', '剩饭剩菜', '包', '垃圾桶', '塑料器皿', '塑料玩具', '塑料衣架',
+           '大骨头', '干电池', '快递纸袋', '插头电线', '旧衣服', '易拉罐', '枕头', '果皮果肉', '毛绒玩具',
+           '污损塑料', '污损用纸', '洗护用品', '烟蒂', '牙签', '玻璃器皿', '砧板', '筷子', '纸盒纸箱',
+           '花盆', '茶叶渣', '菜帮菜叶', '蛋壳', '调料瓶', '软膏', '过期药物', '酒瓶', '金属厨具',
+           '金属器皿', '金属食品罐', '锅', '陶瓷器皿', '鞋', '食用油桶', '饮料瓶', '鱼骨')
+img_norm_cfg = dict(
+    mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(type='Resize', img_scale=(1000, 600), keep_ratio=True),
+    dict(type='RandomFlip', flip_ratio=0.5),
+    dict(
+        type='Normalize',
+        mean=[123.675, 116.28, 103.53],
+        std=[58.395, 57.12, 57.375],
+        to_rgb=True),
+    dict(type='Pad', size_divisor=32),
+    dict(type='DefaultFormatBundle'),
+    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
+]
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(
+        type='MultiScaleFlipAug',
+        img_scale=(1000, 600),
+        flip=False,
+        transforms=[
+            dict(type='Resize', keep_ratio=True),
+            dict(type='RandomFlip'),
+            dict(
+                type='Normalize',
+                mean=[123.675, 116.28, 103.53],
+                std=[58.395, 57.12, 57.375],
+                to_rgb=True),
+            dict(type='Pad', size_divisor=32),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(type='Collect', keys=['img'])
+        ])
+]
+data = dict(
+    samples_per_gpu=8,
+    workers_per_gpu=8,
+    train=dict(
+        type='RepeatDataset',
+        times=1,
+        dataset=dict(
+            type='VOCDataset',
+            classes=('一次性快餐盒', '书籍纸张', '充电宝', '剩饭剩菜', '包', '垃圾桶', '塑料器皿',
+                     '塑料玩具', '塑料衣架', '大骨头', '干电池', '快递纸袋', '插头电线', '旧衣服',
+                     '易拉罐', '枕头', '果皮果肉', '毛绒玩具', '污损塑料', '污损用纸', '洗护用品', '烟蒂',
+                     '牙签', '玻璃器皿', '砧板', '筷子', '纸盒纸箱', '花盆', '茶叶渣', '菜帮菜叶',
+                     '蛋壳', '调料瓶', '软膏', '过期药物', '酒瓶', '金属厨具', '金属器皿', '金属食品罐',
+                     '锅', '陶瓷器皿', '鞋', '食用油桶', '饮料瓶', '鱼骨'),
+            ann_file=[
+                '/cache/datasets/VOCdevkit/VOC2007/ImageSets/Main/train.txt'
+            ],
+            img_prefix=['/cache/datasets/VOCdevkit/VOC2007/'],
+            pipeline=[
+                dict(type='LoadImageFromFile'),
+                dict(type='LoadAnnotations', with_bbox=True),
+                dict(type='Resize', img_scale=(1000, 600), keep_ratio=True),
+                dict(type='RandomFlip', flip_ratio=0.5),
+                dict(
+                    type='Normalize',
+                    mean=[123.675, 116.28, 103.53],
+                    std=[58.395, 57.12, 57.375],
+                    to_rgb=True),
+                dict(type='Pad', size_divisor=32),
+                dict(type='DefaultFormatBundle'),
+                dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
+            ])),
+    val=dict(
+        type='VOCDataset',
+        classes=('一次性快餐盒', '书籍纸张', '充电宝', '剩饭剩菜', '包', '垃圾桶', '塑料器皿', '塑料玩具',
+                 '塑料衣架', '大骨头', '干电池', '快递纸袋', '插头电线', '旧衣服', '易拉罐', '枕头',
+                 '果皮果肉', '毛绒玩具', '污损塑料', '污损用纸', '洗护用品', '烟蒂', '牙签', '玻璃器皿',
+                 '砧板', '筷子', '纸盒纸箱', '花盆', '茶叶渣', '菜帮菜叶', '蛋壳', '调料瓶', '软膏',
+                 '过期药物', '酒瓶', '金属厨具', '金属器皿', '金属食品罐', '锅', '陶瓷器皿', '鞋',
+                 '食用油桶', '饮料瓶', '鱼骨'),
+        ann_file='/cache/datasets/VOCdevkit/VOC2007/ImageSets/Main/val.txt',
+        img_prefix='/cache/datasets/VOCdevkit/VOC2007/',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(
+                type='MultiScaleFlipAug',
+                img_scale=(1000, 600),
+                flip=False,
+                transforms=[
+                    dict(type='Resize', keep_ratio=True),
+                    dict(type='RandomFlip'),
+                    dict(
+                        type='Normalize',
+                        mean=[123.675, 116.28, 103.53],
+                        std=[58.395, 57.12, 57.375],
+                        to_rgb=True),
+                    dict(type='Pad', size_divisor=32),
+                    dict(type='ImageToTensor', keys=['img']),
+                    dict(type='Collect', keys=['img'])
+                ])
+        ]),
+    test=dict(
+        type='VOCDataset',
+        classes=('一次性快餐盒', '书籍纸张', '充电宝', '剩饭剩菜', '包', '垃圾桶', '塑料器皿', '塑料玩具',
+                 '塑料衣架', '大骨头', '干电池', '快递纸袋', '插头电线', '旧衣服', '易拉罐', '枕头',
+                 '果皮果肉', '毛绒玩具', '污损塑料', '污损用纸', '洗护用品', '烟蒂', '牙签', '玻璃器皿',
+                 '砧板', '筷子', '纸盒纸箱', '花盆', '茶叶渣', '菜帮菜叶', '蛋壳', '调料瓶', '软膏',
+                 '过期药物', '酒瓶', '金属厨具', '金属器皿', '金属食品罐', '锅', '陶瓷器皿', '鞋',
+                 '食用油桶', '饮料瓶', '鱼骨'),
+        ann_file='/cache/datasets/VOCdevkit/VOC2007/ImageSets/Main/val.txt',
+        img_prefix='/cache/datasets/VOCdevkit/VOC2007/',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(
+                type='MultiScaleFlipAug',
+                img_scale=(1000, 600),
+                flip=False,
+                transforms=[
+                    dict(type='Resize', keep_ratio=True),
+                    dict(type='RandomFlip'),
+                    dict(
+                        type='Normalize',
+                        mean=[123.675, 116.28, 103.53],
+                        std=[58.395, 57.12, 57.375],
+                        to_rgb=True),
+                    dict(type='Pad', size_divisor=32),
+                    dict(type='ImageToTensor', keys=['img']),
+                    dict(type='Collect', keys=['img'])
+                ])
+        ]))
+evaluation = dict(interval=1, metric='mAP')
+optimizer = dict(type='Adam', lr=0.0002, weight_decay=0.0001, amsgrad=True)
+optimizer_config = dict(grad_clip=None)
+lr_config = dict(
+    policy='step',
+    warmup='linear',
+    warmup_iters=500,
+    warmup_ratio=0.001,
+    step=[12, 16])
+total_epochs = 3
+checkpoint_config = dict(interval=1)
+log_config = dict(interval=50, hooks=[dict(type='TextLoggerHook')])
+dist_params = dict(backend='nccl')
+log_level = 'INFO'
+load_from = None
+resume_from = None
+workflow = [('train', 1)]
+work_dir = 'mmdetection/work_dir'
+gpu_ids = range(0, 1)
+
+2020-06-09 23:32:51,151 - mmdet - WARNING - The model and loaded state dict do not match exactly
+
+unexpected key in source state_dict: fc.weight, fc.bias
+
+2020-06-09 23:32:58,597 - mmdet - INFO - Start running, host: work@joba21bcff4-job-trainjob-badd-0, work_dir: /cache/user-job-dir/mmdetection/work_dir
+2020-06-09 23:32:58,597 - mmdet - INFO - workflow: [('train', 1)], max: 3 epochs
+2020-06-09 23:33:34,205 - mmdet - INFO - Epoch [1][50/1684]	lr: 0.00002, eta: 0:59:21, time: 0.712, data_time: 0.067, memory: 8435, loss_rpn_cls: 0.4117, loss_rpn_bbox: 0.0253, loss_cls: 1.9148, acc: 78.0459, loss_bbox: 0.0728, loss: 2.4246
+2020-06-09 23:34:07,319 - mmdet - INFO - Epoch [1][100/1684]	lr: 0.00004, eta: 0:56:42, time: 0.662, data_time: 0.012, memory: 8435, loss_rpn_cls: 0.0595, loss_rpn_bbox: 0.0204, loss_cls: 0.9274, acc: 96.7715, loss_bbox: 0.1294, loss: 1.1367
+2020-06-09 23:34:40,440 - mmdet - INFO - Epoch [1][150/1684]	lr: 0.00006, eta: 0:55:28, time: 0.662, data_time: 0.012, memory: 8435, loss_rpn_cls: 0.0413, loss_rpn_bbox: 0.0180, loss_cls: 0.8622, acc: 96.6802, loss_bbox: 0.1321, loss: 1.0535
+2020-06-09 23:35:13,778 - mmdet - INFO - Epoch [1][200/1684]	lr: 0.00008, eta: 0:54:39, time: 0.667, data_time: 0.012, memory: 8435, loss_rpn_cls: 0.0374, loss_rpn_bbox: 0.0184, loss_cls: 0.8100, acc: 96.6167, loss_bbox: 0.1359, loss: 1.0017
+2020-06-09 23:35:46,967 - mmdet - INFO - Epoch [1][250/1684]	lr: 0.00010, eta: 0:53:53, time: 0.664, data_time: 0.012, memory: 8435, loss_rpn_cls: 0.0393, loss_rpn_bbox: 0.0191, loss_cls: 0.4794, acc: 96.7563, loss_bbox: 0.1298, loss: 0.6678
+2020-06-09 23:36:20,043 - mmdet - INFO - Epoch [1][300/1684]	lr: 0.00012, eta: 0:53:10, time: 0.661, data_time: 0.012, memory: 8435, loss_rpn_cls: 0.0416, loss_rpn_bbox: 0.0223, loss_cls: 0.5044, acc: 96.4458, loss_bbox: 0.1402, loss: 0.7085
+2020-06-09 23:36:53,395 - mmdet - INFO - Epoch [1][350/1684]	lr: 0.00014, eta: 0:52:34, time: 0.667, data_time: 0.012, memory: 8435, loss_rpn_cls: 0.0328, loss_rpn_bbox: 0.0193, loss_cls: 0.3746, acc: 96.4536, loss_bbox: 0.1373, loss: 0.5641
+2020-06-09 23:37:26,820 - mmdet - INFO - Epoch [1][400/1684]	lr: 0.00016, eta: 0:51:59, time: 0.668, data_time: 0.012, memory: 8435, loss_rpn_cls: 0.0302, loss_rpn_bbox: 0.0184, loss_cls: 0.3577, acc: 96.2393, loss_bbox: 0.1391, loss: 0.5454
+2020-06-09 23:38:00,104 - mmdet - INFO - Epoch [1][450/1684]	lr: 0.00018, eta: 0:51:23, time: 0.666, data_time: 0.013, memory: 8435, loss_rpn_cls: 0.0348, loss_rpn_bbox: 0.0184, loss_cls: 0.5745, acc: 96.2622, loss_bbox: 0.1349, loss: 0.7625
+2020-06-09 23:38:33,408 - mmdet - INFO - Epoch [1][500/1684]	lr: 0.00020, eta: 0:50:48, time: 0.666, data_time: 0.012, memory: 8435, loss_rpn_cls: 0.0307, loss_rpn_bbox: 0.0176, loss_cls: 0.5634, acc: 96.3965, loss_bbox: 0.1292, loss: 0.7410
+2020-06-09 23:39:06,607 - mmdet - INFO - Epoch [1][550/1684]	lr: 0.00020, eta: 0:50:12, time: 0.664, data_time: 0.012, memory: 8435, loss_rpn_cls: 0.0298, loss_rpn_bbox: 0.0178, loss_cls: 0.5289, acc: 96.2563, loss_bbox: 0.1275, loss: 0.7040
+2020-06-09 23:39:39,691 - mmdet - INFO - Epoch [1][600/1684]	lr: 0.00020, eta: 0:49:36, time: 0.662, data_time: 0.012, memory: 8435, loss_rpn_cls: 0.0365, loss_rpn_bbox: 0.0201, loss_cls: 0.4267, acc: 96.0459, loss_bbox: 0.1346, loss: 0.6179
+2020-06-09 23:40:13,022 - mmdet - INFO - Epoch [1][650/1684]	lr: 0.00020, eta: 0:49:01, time: 0.667, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0291, loss_rpn_bbox: 0.0183, loss_cls: 0.2919, acc: 96.3042, loss_bbox: 0.1213, loss: 0.4606
+2020-06-09 23:40:46,543 - mmdet - INFO - Epoch [1][700/1684]	lr: 0.00020, eta: 0:48:29, time: 0.670, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0267, loss_rpn_bbox: 0.0153, loss_cls: 0.2288, acc: 96.0874, loss_bbox: 0.1301, loss: 0.4009
+2020-06-09 23:41:19,525 - mmdet - INFO - Epoch [1][750/1684]	lr: 0.00020, eta: 0:47:53, time: 0.660, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0227, loss_rpn_bbox: 0.0165, loss_cls: 0.2070, acc: 96.4766, loss_bbox: 0.1150, loss: 0.3612
+2020-06-09 23:41:52,739 - mmdet - INFO - Epoch [1][800/1684]	lr: 0.00020, eta: 0:47:18, time: 0.664, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0270, loss_rpn_bbox: 0.0162, loss_cls: 0.2046, acc: 96.4756, loss_bbox: 0.1112, loss: 0.3590
+2020-06-09 23:42:25,915 - mmdet - INFO - Epoch [1][850/1684]	lr: 0.00020, eta: 0:46:44, time: 0.664, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0227, loss_rpn_bbox: 0.0141, loss_cls: 0.1971, acc: 96.4341, loss_bbox: 0.1107, loss: 0.3446
+2020-06-09 23:42:59,350 - mmdet - INFO - Epoch [1][900/1684]	lr: 0.00020, eta: 0:46:11, time: 0.669, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0321, loss_rpn_bbox: 0.0187, loss_cls: 0.2185, acc: 96.0757, loss_bbox: 0.1232, loss: 0.3926
+2020-06-09 23:43:32,817 - mmdet - INFO - Epoch [1][950/1684]	lr: 0.00020, eta: 0:45:38, time: 0.669, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0307, loss_rpn_bbox: 0.0197, loss_cls: 0.2120, acc: 96.1685, loss_bbox: 0.1208, loss: 0.3832
+2020-06-09 23:44:05,995 - mmdet - INFO - Epoch [1][1000/1684]	lr: 0.00020, eta: 0:45:04, time: 0.664, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0222, loss_rpn_bbox: 0.0148, loss_cls: 0.1972, acc: 96.4106, loss_bbox: 0.1097, loss: 0.3438
+2020-06-09 23:44:39,234 - mmdet - INFO - Epoch [1][1050/1684]	lr: 0.00020, eta: 0:44:30, time: 0.665, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0203, loss_rpn_bbox: 0.0138, loss_cls: 0.1964, acc: 96.4243, loss_bbox: 0.1111, loss: 0.3415
+2020-06-09 23:45:12,384 - mmdet - INFO - Epoch [1][1100/1684]	lr: 0.00020, eta: 0:43:56, time: 0.663, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0277, loss_rpn_bbox: 0.0155, loss_cls: 0.1962, acc: 96.3662, loss_bbox: 0.1129, loss: 0.3523
+2020-06-09 23:45:45,513 - mmdet - INFO - Epoch [1][1150/1684]	lr: 0.00020, eta: 0:43:22, time: 0.663, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0234, loss_rpn_bbox: 0.0144, loss_cls: 0.1821, acc: 96.4019, loss_bbox: 0.1073, loss: 0.3272
+2020-06-09 23:46:19,036 - mmdet - INFO - Epoch [1][1200/1684]	lr: 0.00020, eta: 0:42:49, time: 0.670, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0264, loss_rpn_bbox: 0.0158, loss_cls: 0.1905, acc: 96.3545, loss_bbox: 0.1125, loss: 0.3453
+2020-06-09 23:46:52,511 - mmdet - INFO - Epoch [1][1250/1684]	lr: 0.00020, eta: 0:42:16, time: 0.670, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0200, loss_rpn_bbox: 0.0129, loss_cls: 0.1987, acc: 96.3149, loss_bbox: 0.1112, loss: 0.3429
+2020-06-09 23:47:25,875 - mmdet - INFO - Epoch [1][1300/1684]	lr: 0.00020, eta: 0:41:43, time: 0.667, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0207, loss_rpn_bbox: 0.0177, loss_cls: 0.1856, acc: 96.3638, loss_bbox: 0.1078, loss: 0.3318
+2020-06-09 23:47:59,200 - mmdet - INFO - Epoch [1][1350/1684]	lr: 0.00020, eta: 0:41:09, time: 0.666, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0272, loss_rpn_bbox: 0.0165, loss_cls: 0.2005, acc: 96.0972, loss_bbox: 0.1170, loss: 0.3613
+2020-06-09 23:48:32,300 - mmdet - INFO - Epoch [1][1400/1684]	lr: 0.00020, eta: 0:40:35, time: 0.662, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0258, loss_rpn_bbox: 0.0148, loss_cls: 0.1913, acc: 96.4199, loss_bbox: 0.1081, loss: 0.3400
+2020-06-09 23:49:05,603 - mmdet - INFO - Epoch [1][1450/1684]	lr: 0.00020, eta: 0:40:02, time: 0.666, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0269, loss_rpn_bbox: 0.0156, loss_cls: 0.1981, acc: 96.2393, loss_bbox: 0.1144, loss: 0.3550
+2020-06-09 23:49:38,964 - mmdet - INFO - Epoch [1][1500/1684]	lr: 0.00020, eta: 0:39:28, time: 0.667, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0231, loss_rpn_bbox: 0.0147, loss_cls: 0.1768, acc: 96.4619, loss_bbox: 0.1011, loss: 0.3156
+2020-06-09 23:50:12,554 - mmdet - INFO - Epoch [1][1550/1684]	lr: 0.00020, eta: 0:38:56, time: 0.672, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0236, loss_rpn_bbox: 0.0173, loss_cls: 0.1808, acc: 96.4404, loss_bbox: 0.1066, loss: 0.3284
+2020-06-09 23:50:46,076 - mmdet - INFO - Epoch [1][1600/1684]	lr: 0.00020, eta: 0:38:23, time: 0.670, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0207, loss_rpn_bbox: 0.0158, loss_cls: 0.1908, acc: 96.2231, loss_bbox: 0.1111, loss: 0.3384
+2020-06-09 23:51:19,373 - mmdet - INFO - Epoch [1][1650/1684]	lr: 0.00020, eta: 0:37:49, time: 0.666, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0209, loss_rpn_bbox: 0.0149, loss_cls: 0.1955, acc: 96.0791, loss_bbox: 0.1163, loss: 0.3476
+2020-06-09 23:52:39,801 - mmdet - INFO - 
++--------------+-----+------+--------+-------+
+| class        | gts | dets | recall | ap    |
++--------------+-----+------+--------+-------+
+| 一次性快餐盒 | 23  | 31   | 0.174  | 0.109 |
+| 书籍纸张     | 11  | 9    | 0.091  | 0.045 |
+| 充电宝       | 45  | 201  | 0.489  | 0.217 |
+| 剩饭剩菜     | 89  | 124  | 0.382  | 0.255 |
+| 包           | 43  | 351  | 0.814  | 0.249 |
+| 垃圾桶       | 12  | 0    | 0.000  | 0.000 |
+| 塑料器皿     | 79  | 228  | 0.646  | 0.403 |
+| 塑料玩具     | 60  | 231  | 0.550  | 0.245 |
+| 塑料衣架     | 40  | 211  | 0.725  | 0.560 |
+| 大骨头       | 33  | 285  | 0.697  | 0.221 |
+| 干电池       | 49  | 184  | 0.490  | 0.179 |
+| 快递纸袋     | 22  | 91   | 0.500  | 0.197 |
+| 插头电线     | 119 | 577  | 0.286  | 0.052 |
+| 旧衣服       | 42  | 374  | 0.905  | 0.295 |
+| 易拉罐       | 30  | 153  | 0.567  | 0.231 |
+| 枕头         | 33  | 306  | 0.848  | 0.276 |
+| 果皮果肉     | 105 | 833  | 0.781  | 0.427 |
+| 毛绒玩具     | 86  | 860  | 0.802  | 0.449 |
+| 污损塑料     | 130 | 593  | 0.323  | 0.201 |
+| 污损用纸     | 17  | 0    | 0.000  | 0.000 |
+| 洗护用品     | 97  | 586  | 0.701  | 0.216 |
+| 烟蒂         | 44  | 1    | 0.023  | 0.091 |
+| 牙签         | 18  | 3    | 0.000  | 0.000 |
+| 玻璃器皿     | 82  | 421  | 0.549  | 0.245 |
+| 砧板         | 53  | 227  | 0.755  | 0.450 |
+| 筷子         | 70  | 201  | 0.371  | 0.280 |
+| 纸盒纸箱     | 61  | 139  | 0.459  | 0.299 |
+| 花盆         | 23  | 0    | 0.000  | 0.000 |
+| 茶叶渣       | 37  | 110  | 0.838  | 0.679 |
+| 菜帮菜叶     | 82  | 287  | 0.707  | 0.586 |
+| 蛋壳         | 46  | 336  | 0.500  | 0.185 |
+| 调料瓶       | 58  | 237  | 0.552  | 0.216 |
+| 软膏         | 48  | 78   | 0.625  | 0.455 |
+| 过期药物     | 50  | 216  | 0.760  | 0.396 |
+| 酒瓶         | 36  | 274  | 0.778  | 0.316 |
+| 金属厨具     | 21  | 0    | 0.000  | 0.000 |
+| 金属器皿     | 34  | 12   | 0.029  | 0.091 |
+| 金属食品罐   | 32  | 407  | 0.719  | 0.276 |
+| 锅           | 62  | 359  | 0.726  | 0.265 |
+| 陶瓷器皿     | 180 | 694  | 0.622  | 0.295 |
+| 鞋           | 43  | 378  | 0.605  | 0.354 |
+| 食用油桶     | 38  | 136  | 0.816  | 0.692 |
+| 饮料瓶       | 31  | 40   | 0.032  | 0.003 |
+| 鱼骨         | 46  | 208  | 0.522  | 0.191 |
++--------------+-----+------+--------+-------+
+| mAP          |     |      |        | 0.254 |
++--------------+-----+------+--------+-------+
+2020-06-09 23:52:39,816 - mmdet - INFO - Epoch [1][1684/1684]	lr: 0.00020, mAP: 0.2544
+2020-06-09 23:53:16,010 - mmdet - INFO - Epoch [2][50/1684]	lr: 0.00020, eta: 0:36:15, time: 0.724, data_time: 0.068, memory: 10835, loss_rpn_cls: 0.0206, loss_rpn_bbox: 0.0160, loss_cls: 0.1892, acc: 96.2349, loss_bbox: 0.1120, loss: 0.3377
+2020-06-09 23:53:49,409 - mmdet - INFO - Epoch [2][100/1684]	lr: 0.00020, eta: 0:35:43, time: 0.668, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0224, loss_rpn_bbox: 0.0156, loss_cls: 0.1909, acc: 96.1670, loss_bbox: 0.1118, loss: 0.3407
+2020-06-09 23:54:22,723 - mmdet - INFO - Epoch [2][150/1684]	lr: 0.00020, eta: 0:35:11, time: 0.666, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0181, loss_rpn_bbox: 0.0157, loss_cls: 0.1921, acc: 96.0757, loss_bbox: 0.1133, loss: 0.3392
+2020-06-09 23:54:56,392 - mmdet - INFO - Epoch [2][200/1684]	lr: 0.00020, eta: 0:34:40, time: 0.673, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0246, loss_rpn_bbox: 0.0176, loss_cls: 0.1917, acc: 96.0396, loss_bbox: 0.1146, loss: 0.3485
+2020-06-09 23:55:29,682 - mmdet - INFO - Epoch [2][250/1684]	lr: 0.00020, eta: 0:34:08, time: 0.666, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0251, loss_rpn_bbox: 0.0166, loss_cls: 0.1826, acc: 96.1748, loss_bbox: 0.1115, loss: 0.3358
+2020-06-09 23:56:03,140 - mmdet - INFO - Epoch [2][300/1684]	lr: 0.00020, eta: 0:33:36, time: 0.669, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0220, loss_rpn_bbox: 0.0151, loss_cls: 0.1872, acc: 96.1509, loss_bbox: 0.1133, loss: 0.3376
+2020-06-09 23:56:36,261 - mmdet - INFO - Epoch [2][350/1684]	lr: 0.00020, eta: 0:33:04, time: 0.662, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0220, loss_rpn_bbox: 0.0144, loss_cls: 0.1677, acc: 96.6260, loss_bbox: 0.0966, loss: 0.3006
+2020-06-09 23:57:09,587 - mmdet - INFO - Epoch [2][400/1684]	lr: 0.00020, eta: 0:32:31, time: 0.667, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0210, loss_rpn_bbox: 0.0154, loss_cls: 0.1715, acc: 96.3921, loss_bbox: 0.1048, loss: 0.3128
+2020-06-09 23:57:43,006 - mmdet - INFO - Epoch [2][450/1684]	lr: 0.00020, eta: 0:31:59, time: 0.668, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0236, loss_rpn_bbox: 0.0163, loss_cls: 0.1719, acc: 96.3540, loss_bbox: 0.0989, loss: 0.3107
+2020-06-09 23:58:16,312 - mmdet - INFO - Epoch [2][500/1684]	lr: 0.00020, eta: 0:31:27, time: 0.666, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0154, loss_rpn_bbox: 0.0119, loss_cls: 0.1664, acc: 96.4634, loss_bbox: 0.1023, loss: 0.2960
+2020-06-09 23:58:49,532 - mmdet - INFO - Epoch [2][550/1684]	lr: 0.00020, eta: 0:30:54, time: 0.664, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0208, loss_rpn_bbox: 0.0155, loss_cls: 0.1779, acc: 96.2812, loss_bbox: 0.1058, loss: 0.3200
+2020-06-09 23:59:22,864 - mmdet - INFO - Epoch [2][600/1684]	lr: 0.00020, eta: 0:30:22, time: 0.667, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0179, loss_rpn_bbox: 0.0120, loss_cls: 0.1619, acc: 96.6855, loss_bbox: 0.0954, loss: 0.2872
+2020-06-09 23:59:56,075 - mmdet - INFO - Epoch [2][650/1684]	lr: 0.00020, eta: 0:29:49, time: 0.664, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0177, loss_rpn_bbox: 0.0133, loss_cls: 0.1574, acc: 96.6099, loss_bbox: 0.0964, loss: 0.2848
+2020-06-10 00:00:29,344 - mmdet - INFO - Epoch [2][700/1684]	lr: 0.00020, eta: 0:29:17, time: 0.665, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0201, loss_rpn_bbox: 0.0144, loss_cls: 0.1753, acc: 96.3496, loss_bbox: 0.1041, loss: 0.3139
+2020-06-10 00:01:02,701 - mmdet - INFO - Epoch [2][750/1684]	lr: 0.00020, eta: 0:28:44, time: 0.667, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0195, loss_rpn_bbox: 0.0133, loss_cls: 0.1691, acc: 96.5146, loss_bbox: 0.1017, loss: 0.3036
+2020-06-10 00:01:35,833 - mmdet - INFO - Epoch [2][800/1684]	lr: 0.00020, eta: 0:28:12, time: 0.663, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0223, loss_rpn_bbox: 0.0152, loss_cls: 0.1693, acc: 96.4541, loss_bbox: 0.0974, loss: 0.3042
+2020-06-10 00:02:09,047 - mmdet - INFO - Epoch [2][850/1684]	lr: 0.00020, eta: 0:27:39, time: 0.664, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0198, loss_rpn_bbox: 0.0149, loss_cls: 0.1618, acc: 96.4595, loss_bbox: 0.0962, loss: 0.2927
+2020-06-10 00:02:42,169 - mmdet - INFO - Epoch [2][900/1684]	lr: 0.00020, eta: 0:27:06, time: 0.662, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0190, loss_rpn_bbox: 0.0134, loss_cls: 0.1635, acc: 96.6201, loss_bbox: 0.0950, loss: 0.2910
+2020-06-10 00:03:15,778 - mmdet - INFO - Epoch [2][950/1684]	lr: 0.00020, eta: 0:26:34, time: 0.672, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0186, loss_rpn_bbox: 0.0165, loss_cls: 0.1604, acc: 96.5083, loss_bbox: 0.0968, loss: 0.2923
+2020-06-10 00:03:49,299 - mmdet - INFO - Epoch [2][1000/1684]	lr: 0.00020, eta: 0:26:01, time: 0.670, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0166, loss_rpn_bbox: 0.0131, loss_cls: 0.1673, acc: 96.4702, loss_bbox: 0.0984, loss: 0.2954
+2020-06-10 00:04:22,527 - mmdet - INFO - Epoch [2][1050/1684]	lr: 0.00020, eta: 0:25:29, time: 0.665, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0205, loss_rpn_bbox: 0.0134, loss_cls: 0.1701, acc: 96.4419, loss_bbox: 0.1021, loss: 0.3061
+2020-06-10 00:04:55,667 - mmdet - INFO - Epoch [2][1100/1684]	lr: 0.00020, eta: 0:24:56, time: 0.663, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0152, loss_rpn_bbox: 0.0131, loss_cls: 0.1608, acc: 96.5205, loss_bbox: 0.0979, loss: 0.2871
+2020-06-10 00:05:28,927 - mmdet - INFO - Epoch [2][1150/1684]	lr: 0.00020, eta: 0:24:23, time: 0.665, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0180, loss_rpn_bbox: 0.0155, loss_cls: 0.1640, acc: 96.5063, loss_bbox: 0.1036, loss: 0.3012
+2020-06-10 00:06:02,518 - mmdet - INFO - Epoch [2][1200/1684]	lr: 0.00020, eta: 0:23:50, time: 0.672, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0205, loss_rpn_bbox: 0.0154, loss_cls: 0.1671, acc: 96.3267, loss_bbox: 0.1020, loss: 0.3051
+2020-06-10 00:06:35,831 - mmdet - INFO - Epoch [2][1250/1684]	lr: 0.00020, eta: 0:23:18, time: 0.666, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0184, loss_rpn_bbox: 0.0142, loss_cls: 0.1676, acc: 96.4395, loss_bbox: 0.1015, loss: 0.3017
+2020-06-10 00:07:09,178 - mmdet - INFO - Epoch [2][1300/1684]	lr: 0.00020, eta: 0:22:45, time: 0.667, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0165, loss_rpn_bbox: 0.0133, loss_cls: 0.1745, acc: 96.2554, loss_bbox: 0.1062, loss: 0.3106
+2020-06-10 00:07:42,553 - mmdet - INFO - Epoch [2][1350/1684]	lr: 0.00020, eta: 0:22:12, time: 0.667, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0188, loss_rpn_bbox: 0.0148, loss_cls: 0.1715, acc: 96.3271, loss_bbox: 0.1023, loss: 0.3074
+2020-06-10 00:08:15,968 - mmdet - INFO - Epoch [2][1400/1684]	lr: 0.00020, eta: 0:21:39, time: 0.668, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0182, loss_rpn_bbox: 0.0164, loss_cls: 0.1835, acc: 96.0781, loss_bbox: 0.1088, loss: 0.3269
+2020-06-10 00:08:49,528 - mmdet - INFO - Epoch [2][1450/1684]	lr: 0.00020, eta: 0:21:07, time: 0.671, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0213, loss_rpn_bbox: 0.0141, loss_cls: 0.1801, acc: 96.3179, loss_bbox: 0.1052, loss: 0.3207
+2020-06-10 00:09:22,815 - mmdet - INFO - Epoch [2][1500/1684]	lr: 0.00020, eta: 0:20:34, time: 0.666, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0184, loss_rpn_bbox: 0.0147, loss_cls: 0.1709, acc: 96.3374, loss_bbox: 0.1036, loss: 0.3075
+2020-06-10 00:09:56,298 - mmdet - INFO - Epoch [2][1550/1684]	lr: 0.00020, eta: 0:20:01, time: 0.670, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0170, loss_rpn_bbox: 0.0141, loss_cls: 0.1677, acc: 96.3364, loss_bbox: 0.1019, loss: 0.3008
+2020-06-10 00:10:29,599 - mmdet - INFO - Epoch [2][1600/1684]	lr: 0.00020, eta: 0:19:28, time: 0.666, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0232, loss_rpn_bbox: 0.0176, loss_cls: 0.1782, acc: 96.0620, loss_bbox: 0.1105, loss: 0.3295
+2020-06-10 00:11:02,725 - mmdet - INFO - Epoch [2][1650/1684]	lr: 0.00020, eta: 0:18:55, time: 0.663, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0161, loss_rpn_bbox: 0.0126, loss_cls: 0.1556, acc: 96.6255, loss_bbox: 0.0942, loss: 0.2784
+2020-06-10 00:12:23,218 - mmdet - INFO - 
++--------------+-----+------+--------+-------+
+| class        | gts | dets | recall | ap    |
++--------------+-----+------+--------+-------+
+| 一次性快餐盒 | 23  | 143  | 0.696  | 0.304 |
+| 书籍纸张     | 11  | 47   | 0.364  | 0.086 |
+| 充电宝       | 45  | 233  | 0.511  | 0.325 |
+| 剩饭剩菜     | 89  | 801  | 0.809  | 0.375 |
+| 包           | 43  | 234  | 0.884  | 0.520 |
+| 垃圾桶       | 12  | 0    | 0.000  | 0.000 |
+| 塑料器皿     | 79  | 364  | 0.785  | 0.584 |
+| 塑料玩具     | 60  | 405  | 0.783  | 0.367 |
+| 塑料衣架     | 40  | 89   | 0.600  | 0.497 |
+| 大骨头       | 33  | 317  | 0.879  | 0.448 |
+| 干电池       | 49  | 1378 | 0.939  | 0.319 |
+| 快递纸袋     | 22  | 173  | 0.818  | 0.279 |
+| 插头电线     | 119 | 1702 | 0.672  | 0.158 |
+| 旧衣服       | 42  | 187  | 0.762  | 0.415 |
+| 易拉罐       | 30  | 623  | 0.933  | 0.261 |
+| 枕头         | 33  | 194  | 0.727  | 0.348 |
+| 果皮果肉     | 105 | 1555 | 0.876  | 0.468 |
+| 毛绒玩具     | 86  | 456  | 0.837  | 0.554 |
+| 污损塑料     | 130 | 234  | 0.408  | 0.330 |
+| 污损用纸     | 17  | 0    | 0.000  | 0.000 |
+| 洗护用品     | 97  | 889  | 0.825  | 0.439 |
+| 烟蒂         | 44  | 102  | 0.500  | 0.330 |
+| 牙签         | 18  | 23   | 0.167  | 0.050 |
+| 玻璃器皿     | 82  | 1059 | 0.695  | 0.245 |
+| 砧板         | 53  | 222  | 0.887  | 0.646 |
+| 筷子         | 70  | 636  | 0.586  | 0.390 |
+| 纸盒纸箱     | 61  | 333  | 0.590  | 0.435 |
+| 花盆         | 23  | 0    | 0.000  | 0.000 |
+| 茶叶渣       | 37  | 379  | 0.973  | 0.871 |
+| 菜帮菜叶     | 82  | 467  | 0.793  | 0.569 |
+| 蛋壳         | 46  | 431  | 0.652  | 0.237 |
+| 调料瓶       | 58  | 758  | 0.707  | 0.289 |
+| 软膏         | 48  | 493  | 0.896  | 0.544 |
+| 过期药物     | 50  | 468  | 0.840  | 0.490 |
+| 酒瓶         | 36  | 294  | 0.778  | 0.386 |
+| 金属厨具     | 21  | 170  | 0.095  | 0.091 |
+| 金属器皿     | 34  | 349  | 0.588  | 0.063 |
+| 金属食品罐   | 32  | 730  | 0.812  | 0.269 |
+| 锅           | 62  | 855  | 0.855  | 0.504 |
+| 陶瓷器皿     | 180 | 2118 | 0.867  | 0.452 |
+| 鞋           | 43  | 196  | 0.721  | 0.509 |
+| 食用油桶     | 38  | 270  | 0.921  | 0.730 |
+| 饮料瓶       | 31  | 201  | 0.484  | 0.055 |
+| 鱼骨         | 46  | 306  | 0.609  | 0.300 |
++--------------+-----+------+--------+-------+
+| mAP          |     |      |        | 0.353 |
++--------------+-----+------+--------+-------+
+2020-06-10 00:12:23,234 - mmdet - INFO - Epoch [2][1684/1684]	lr: 0.00020, mAP: 0.3530
+2020-06-10 00:12:59,529 - mmdet - INFO - Epoch [3][50/1684]	lr: 0.00020, eta: 0:17:50, time: 0.726, data_time: 0.067, memory: 10835, loss_rpn_cls: 0.0150, loss_rpn_bbox: 0.0131, loss_cls: 0.1474, acc: 96.6274, loss_bbox: 0.0934, loss: 0.2688
+2020-06-10 00:13:32,941 - mmdet - INFO - Epoch [3][100/1684]	lr: 0.00020, eta: 0:17:18, time: 0.668, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0166, loss_rpn_bbox: 0.0141, loss_cls: 0.1604, acc: 96.3691, loss_bbox: 0.0996, loss: 0.2907
+2020-06-10 00:14:06,363 - mmdet - INFO - Epoch [3][150/1684]	lr: 0.00020, eta: 0:16:45, time: 0.668, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0132, loss_rpn_bbox: 0.0113, loss_cls: 0.1456, acc: 96.7881, loss_bbox: 0.0884, loss: 0.2585
+2020-06-10 00:14:39,657 - mmdet - INFO - Epoch [3][200/1684]	lr: 0.00020, eta: 0:16:13, time: 0.666, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0150, loss_rpn_bbox: 0.0130, loss_cls: 0.1682, acc: 96.1562, loss_bbox: 0.1062, loss: 0.3024
+2020-06-10 00:15:13,005 - mmdet - INFO - Epoch [3][250/1684]	lr: 0.00020, eta: 0:15:40, time: 0.667, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0159, loss_rpn_bbox: 0.0136, loss_cls: 0.1561, acc: 96.4873, loss_bbox: 0.0972, loss: 0.2828
+2020-06-10 00:15:46,102 - mmdet - INFO - Epoch [3][300/1684]	lr: 0.00020, eta: 0:15:08, time: 0.662, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0174, loss_rpn_bbox: 0.0135, loss_cls: 0.1618, acc: 96.5103, loss_bbox: 0.0913, loss: 0.2840
+2020-06-10 00:16:19,383 - mmdet - INFO - Epoch [3][350/1684]	lr: 0.00020, eta: 0:14:35, time: 0.666, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0147, loss_rpn_bbox: 0.0131, loss_cls: 0.1686, acc: 96.2085, loss_bbox: 0.1001, loss: 0.2964
+2020-06-10 00:16:52,807 - mmdet - INFO - Epoch [3][400/1684]	lr: 0.00020, eta: 0:14:02, time: 0.668, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0167, loss_rpn_bbox: 0.0123, loss_cls: 0.1701, acc: 96.1670, loss_bbox: 0.1021, loss: 0.3011
+2020-06-10 00:17:26,078 - mmdet - INFO - Epoch [3][450/1684]	lr: 0.00020, eta: 0:13:30, time: 0.665, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0161, loss_rpn_bbox: 0.0134, loss_cls: 0.1560, acc: 96.4580, loss_bbox: 0.0989, loss: 0.2844
+2020-06-10 00:17:59,044 - mmdet - INFO - Epoch [3][500/1684]	lr: 0.00020, eta: 0:12:57, time: 0.659, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0223, loss_rpn_bbox: 0.0151, loss_cls: 0.1730, acc: 96.2178, loss_bbox: 0.1042, loss: 0.3145
+2020-06-10 00:18:32,324 - mmdet - INFO - Epoch [3][550/1684]	lr: 0.00020, eta: 0:12:24, time: 0.666, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0163, loss_rpn_bbox: 0.0129, loss_cls: 0.1715, acc: 96.2495, loss_bbox: 0.1019, loss: 0.3025
+2020-06-10 00:19:05,397 - mmdet - INFO - Epoch [3][600/1684]	lr: 0.00020, eta: 0:11:51, time: 0.661, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0142, loss_rpn_bbox: 0.0129, loss_cls: 0.1545, acc: 96.4805, loss_bbox: 0.0910, loss: 0.2726
+2020-06-10 00:19:38,225 - mmdet - INFO - Epoch [3][650/1684]	lr: 0.00020, eta: 0:11:19, time: 0.657, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0148, loss_rpn_bbox: 0.0113, loss_cls: 0.1676, acc: 96.3672, loss_bbox: 0.1003, loss: 0.2940
+2020-06-10 00:20:11,436 - mmdet - INFO - Epoch [3][700/1684]	lr: 0.00020, eta: 0:10:46, time: 0.664, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0160, loss_rpn_bbox: 0.0138, loss_cls: 0.1570, acc: 96.4053, loss_bbox: 0.0998, loss: 0.2865
+2020-06-10 00:20:44,753 - mmdet - INFO - Epoch [3][750/1684]	lr: 0.00020, eta: 0:10:13, time: 0.666, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0174, loss_rpn_bbox: 0.0154, loss_cls: 0.1596, acc: 96.4375, loss_bbox: 0.1014, loss: 0.2939
+2020-06-10 00:21:18,001 - mmdet - INFO - Epoch [3][800/1684]	lr: 0.00020, eta: 0:09:40, time: 0.665, data_time: 0.012, memory: 10835, loss_rpn_cls: 0.0169, loss_rpn_bbox: 0.0142, loss_cls: 0.1502, acc: 96.4663, loss_bbox: 0.0958, loss: 0.2772
+2020-06-10 00:21:51,494 - mmdet - INFO - Epoch [3][850/1684]	lr: 0.00020, eta: 0:09:08, time: 0.670, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0191, loss_rpn_bbox: 0.0148, loss_cls: 0.1597, acc: 96.4312, loss_bbox: 0.1002, loss: 0.2937
+2020-06-10 00:22:24,626 - mmdet - INFO - Epoch [3][900/1684]	lr: 0.00020, eta: 0:08:35, time: 0.663, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0163, loss_rpn_bbox: 0.0134, loss_cls: 0.1571, acc: 96.3794, loss_bbox: 0.0970, loss: 0.2837
+2020-06-10 00:22:58,167 - mmdet - INFO - Epoch [3][950/1684]	lr: 0.00020, eta: 0:08:02, time: 0.671, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0190, loss_rpn_bbox: 0.0140, loss_cls: 0.1533, acc: 96.4453, loss_bbox: 0.0951, loss: 0.2814
+2020-06-10 00:23:31,659 - mmdet - INFO - Epoch [3][1000/1684]	lr: 0.00020, eta: 0:07:29, time: 0.670, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0166, loss_rpn_bbox: 0.0131, loss_cls: 0.1678, acc: 96.3462, loss_bbox: 0.0997, loss: 0.2973
+2020-06-10 00:24:05,201 - mmdet - INFO - Epoch [3][1050/1684]	lr: 0.00020, eta: 0:06:56, time: 0.671, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0151, loss_rpn_bbox: 0.0136, loss_cls: 0.1640, acc: 96.3403, loss_bbox: 0.0972, loss: 0.2898
+2020-06-10 00:24:38,671 - mmdet - INFO - Epoch [3][1100/1684]	lr: 0.00020, eta: 0:06:24, time: 0.669, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0158, loss_rpn_bbox: 0.0126, loss_cls: 0.1457, acc: 96.6870, loss_bbox: 0.0883, loss: 0.2624
+2020-06-10 00:25:12,069 - mmdet - INFO - Epoch [3][1150/1684]	lr: 0.00020, eta: 0:05:51, time: 0.668, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0145, loss_rpn_bbox: 0.0127, loss_cls: 0.1498, acc: 96.5732, loss_bbox: 0.0919, loss: 0.2689
+2020-06-10 00:25:45,417 - mmdet - INFO - Epoch [3][1200/1684]	lr: 0.00020, eta: 0:05:18, time: 0.667, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0164, loss_rpn_bbox: 0.0134, loss_cls: 0.1703, acc: 96.1919, loss_bbox: 0.1054, loss: 0.3056
+2020-06-10 00:26:18,855 - mmdet - INFO - Epoch [3][1250/1684]	lr: 0.00020, eta: 0:04:45, time: 0.669, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0158, loss_rpn_bbox: 0.0144, loss_cls: 0.1764, acc: 96.1079, loss_bbox: 0.1107, loss: 0.3173
+2020-06-10 00:26:52,385 - mmdet - INFO - Epoch [3][1300/1684]	lr: 0.00020, eta: 0:04:12, time: 0.671, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0204, loss_rpn_bbox: 0.0179, loss_cls: 0.1649, acc: 96.3271, loss_bbox: 0.1004, loss: 0.3035
+2020-06-10 00:27:25,710 - mmdet - INFO - Epoch [3][1350/1684]	lr: 0.00020, eta: 0:03:39, time: 0.666, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0171, loss_rpn_bbox: 0.0134, loss_cls: 0.1593, acc: 96.3384, loss_bbox: 0.1021, loss: 0.2920
+2020-06-10 00:27:59,390 - mmdet - INFO - Epoch [3][1400/1684]	lr: 0.00020, eta: 0:03:07, time: 0.674, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0207, loss_rpn_bbox: 0.0180, loss_cls: 0.1595, acc: 96.2935, loss_bbox: 0.0990, loss: 0.2973
+2020-06-10 00:28:32,907 - mmdet - INFO - Epoch [3][1450/1684]	lr: 0.00020, eta: 0:02:34, time: 0.670, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0148, loss_rpn_bbox: 0.0131, loss_cls: 0.1539, acc: 96.5229, loss_bbox: 0.0949, loss: 0.2767
+2020-06-10 00:29:06,181 - mmdet - INFO - Epoch [3][1500/1684]	lr: 0.00020, eta: 0:02:01, time: 0.665, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0161, loss_rpn_bbox: 0.0123, loss_cls: 0.1536, acc: 96.5444, loss_bbox: 0.0938, loss: 0.2759
+2020-06-10 00:29:39,522 - mmdet - INFO - Epoch [3][1550/1684]	lr: 0.00020, eta: 0:01:28, time: 0.667, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0158, loss_rpn_bbox: 0.0131, loss_cls: 0.1549, acc: 96.5664, loss_bbox: 0.0940, loss: 0.2778
+2020-06-10 00:30:12,903 - mmdet - INFO - Epoch [3][1600/1684]	lr: 0.00020, eta: 0:00:55, time: 0.668, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0185, loss_rpn_bbox: 0.0146, loss_cls: 0.1592, acc: 96.4409, loss_bbox: 0.0959, loss: 0.2882
+2020-06-10 00:30:46,264 - mmdet - INFO - Epoch [3][1650/1684]	lr: 0.00020, eta: 0:00:22, time: 0.667, data_time: 0.013, memory: 10835, loss_rpn_cls: 0.0188, loss_rpn_bbox: 0.0152, loss_cls: 0.1411, acc: 96.6685, loss_bbox: 0.0901, loss: 0.2652
+2020-06-10 00:32:06,821 - mmdet - INFO - 
++--------------+-----+------+--------+-------+
+| class        | gts | dets | recall | ap    |
++--------------+-----+------+--------+-------+
+| 一次性快餐盒 | 23  | 317  | 0.870  | 0.504 |
+| 书籍纸张     | 11  | 84   | 0.545  | 0.193 |
+| 充电宝       | 45  | 266  | 0.844  | 0.422 |
+| 剩饭剩菜     | 89  | 1759 | 0.876  | 0.515 |
+| 包           | 43  | 378  | 0.930  | 0.550 |
+| 垃圾桶       | 12  | 0    | 0.000  | 0.000 |
+| 塑料器皿     | 79  | 228  | 0.709  | 0.622 |
+| 塑料玩具     | 60  | 221  | 0.750  | 0.328 |
+| 塑料衣架     | 40  | 331  | 0.800  | 0.653 |
+| 大骨头       | 33  | 338  | 0.879  | 0.441 |
+| 干电池       | 49  | 651  | 0.959  | 0.441 |
+| 快递纸袋     | 22  | 195  | 0.818  | 0.636 |
+| 插头电线     | 119 | 1898 | 0.739  | 0.215 |
+| 旧衣服       | 42  | 301  | 0.905  | 0.575 |
+| 易拉罐       | 30  | 667  | 0.967  | 0.347 |
+| 枕头         | 33  | 354  | 0.909  | 0.400 |
+| 果皮果肉     | 105 | 413  | 0.724  | 0.436 |
+| 毛绒玩具     | 86  | 145  | 0.709  | 0.605 |
+| 污损塑料     | 130 | 1352 | 0.638  | 0.387 |
+| 污损用纸     | 17  | 0    | 0.000  | 0.000 |
+| 洗护用品     | 97  | 648  | 0.887  | 0.520 |
+| 烟蒂         | 44  | 218  | 0.909  | 0.459 |
+| 牙签         | 18  | 206  | 0.889  | 0.522 |
+| 玻璃器皿     | 82  | 1554 | 0.793  | 0.344 |
+| 砧板         | 53  | 488  | 0.943  | 0.720 |
+| 筷子         | 70  | 593  | 0.629  | 0.397 |
+| 纸盒纸箱     | 61  | 258  | 0.607  | 0.455 |
+| 花盆         | 23  | 23   | 0.130  | 0.106 |
+| 茶叶渣       | 37  | 355  | 0.973  | 0.891 |
+| 菜帮菜叶     | 82  | 409  | 0.805  | 0.573 |
+| 蛋壳         | 46  | 339  | 0.717  | 0.407 |
+| 调料瓶       | 58  | 430  | 0.690  | 0.253 |
+| 软膏         | 48  | 345  | 0.917  | 0.557 |
+| 过期药物     | 50  | 624  | 0.880  | 0.576 |
+| 酒瓶         | 36  | 255  | 0.806  | 0.489 |
+| 金属厨具     | 21  | 358  | 0.190  | 0.093 |
+| 金属器皿     | 34  | 448  | 0.676  | 0.173 |
+| 金属食品罐   | 32  | 502  | 0.750  | 0.302 |
+| 锅           | 62  | 480  | 0.839  | 0.582 |
+| 陶瓷器皿     | 180 | 2618 | 0.889  | 0.457 |
+| 鞋           | 43  | 249  | 0.860  | 0.643 |
+| 食用油桶     | 38  | 389  | 0.921  | 0.808 |
+| 饮料瓶       | 31  | 356  | 0.774  | 0.245 |
+| 鱼骨         | 46  | 401  | 0.804  | 0.338 |
++--------------+-----+------+--------+-------+
+| mAP          |     |      |        | 0.436 |
++--------------+-----+------+--------+-------+
+2020-06-10 00:32:06,839 - mmdet - INFO - Epoch [3][1684/1684]	lr: 0.00020, mAP: 0.4359
